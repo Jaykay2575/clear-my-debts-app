@@ -1428,6 +1428,40 @@ body {
   margin: 0 0 12px;
 }
 
+.payment-alt__call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+  padding: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition);
+  margin-bottom: 8px;
+}
+
+.payment-alt__call svg {
+  color: var(--color-primary);
+}
+
+.payment-alt__call:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-glow);
+}
+
+.payment-alt__hours {
+  font-size: 12px;
+  color: var(--color-text-faint);
+  text-align: center;
+  margin: 0;
+}
+
 .card-link {
   color: var(--color-text-faint);
   text-decoration: none;
