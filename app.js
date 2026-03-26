@@ -40,11 +40,36 @@
   var creditors = []; // { name: string, amount: number }
 
   var CREDITOR_SUGGESTIONS = [
-    'CommBank', 'ANZ', 'Westpac', 'NAB', 'Afterpay', 'Zip',
-    'Latitude Financial', 'Macquarie Bank', 'Suncorp', 'Bank of Queensland',
-    'Bendigo Bank', 'ING', 'Humm', 'Cash Converters', 'Nimble',
-    'Wallet Wizard', 'Money3', 'AGL', 'Origin Energy', 'Telstra',
-    'Optus', 'Vodafone'
+    // Major banks
+    'CommBank', 'ANZ', 'Westpac', 'NAB', 'Macquarie Bank', 'Suncorp',
+    'Bank of Queensland', 'Bendigo Bank', 'ING', 'HSBC', 'Citibank',
+    'St George', 'Bank of Melbourne', 'BankSA', 'ME Bank',
+    // BNPL & fintech
+    'Afterpay', 'Zip', 'Humm', 'Latitude Financial', 'Klarna', 'LatitudePay',
+    // Personal loans & payday
+    'Cash Converters', 'Nimble', 'Wallet Wizard', 'Money3', 'Harmoney',
+    'SocietyOne', 'MoneyMe', 'Plenti', 'Wisr', 'Fair Go Finance',
+    'Cash Train', 'Ferratum', 'Sunshine Loans', 'Credit24',
+    // Utilities & telco
+    'AGL', 'Origin Energy', 'EnergyAustralia', 'Alinta Energy',
+    'Telstra', 'Optus', 'Vodafone', 'TPG', 'Foxtel',
+    // Debt collection agencies
+    'Credit Corp', 'Baycorp', 'Collection House', 'Pioneer Credit',
+    'Recoveries Corporation', 'InDebted', 'National Credit Management',
+    'Panthera Finance', 'State Mercantile', 'Shield Mercantile',
+    'ARL Collect', 'Prushka Fast Debt Recovery', 'eCollect',
+    'Bluechip Collections', 'Debt Recoveries Australia',
+    'Lion Finance', 'Probe Group', 'Slater Byrne Recoveries',
+    'National Mercantile', 'ADR Recoveries', 'Insight Mercantile',
+    'Complete Credit Solutions', 'Commercial Credit Control',
+    'Marshall Freeman', 'Professional Collection Services',
+    'Swift Recovery', 'DCS Group', 'EC Credit Control',
+    'Phillips & Cohen', 'Atradius Collections',
+    'Elite Collection Services', 'Midstate CreditCollect',
+    'Fox Symes', 'Way Forward Debt Solutions',
+    // Government & other
+    'ATO', 'Centrelink', 'HECS-HELP', 'Council Rates',
+    'Strata', 'Real estate agent', 'Private lender'
   ];
 
   // =============================================
