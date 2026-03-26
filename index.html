@@ -369,37 +369,77 @@
         <div class="step" data-step="plan">
           <div class="step__content">
             <p class="step__label">Your personalised plan</p>
-            <h2 class="step__title">One payment.<br>We handle the rest.</h2>
-            <p class="step__subtitle">We negotiate with every creditor to reduce what you owe. You make one simple payment a month — we distribute it for you.</p>
+            <h2 class="step__title">One payment.<br>We handle everything.</h2>
+            <p class="step__subtitle">Stop juggling <span id="planCreditorCount"></span> creditors. We deal with all of them — you just make one simple payment.</p>
 
             <!-- Monthly Payment Hero -->
             <div class="plan-monthly-card">
               <span class="plan-monthly-card__label">Your monthly repayment</span>
               <span class="plan-monthly-card__value" id="planMonthlyAmount"></span>
-              <span class="plan-monthly-card__note">That's it. One payment, every month.</span>
+              <span class="plan-monthly-card__note">One payment. Every month. That's it.</span>
             </div>
 
-            <!-- How it Works -->
-            <div class="plan-steps">
-              <div class="plan-step">
-                <div class="plan-step__number">1</div>
-                <div class="plan-step__text">
-                  <strong>We negotiate</strong>
-                  <span>We contact all <span id="planCreditorCount"></span> creditors to freeze interest, stop calls, and reduce your balances.</span>
+            <!-- What's Included -->
+            <div class="plan-includes">
+              <p class="plan-includes__heading">What's included</p>
+
+              <div class="plan-perk">
+                <div class="plan-perk__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </div>
+                <div class="plan-perk__text">
+                  <strong>Collector calls stopped</strong>
+                  <span>We redirect all creditor contact to us. Your phone goes quiet.</span>
                 </div>
               </div>
-              <div class="plan-step">
-                <div class="plan-step__number">2</div>
-                <div class="plan-step__text">
-                  <strong>One monthly payment</strong>
-                  <span>You pay <span id="planMonthlyInline"></span> each month. We split it between your creditors.</span>
+
+              <div class="plan-perk">
+                <div class="plan-perk__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                </div>
+                <div class="plan-perk__text">
+                  <strong>Interest frozen</strong>
+                  <span>We negotiate hardship with every creditor to stop interest piling up.</span>
                 </div>
               </div>
-              <div class="plan-step">
-                <div class="plan-step__number">3</div>
-                <div class="plan-step__text">
-                  <strong>Debt cleared</strong>
-                  <span>Watch your balances drop to zero. No more stress, no more collector calls.</span>
+
+              <div class="plan-perk">
+                <div class="plan-perk__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="plan-perk__text">
+                  <strong>Credit file monitoring</strong>
+                  <span>We keep an eye on your credit report and flag any changes as you recover.</span>
+                </div>
+              </div>
+
+              <div class="plan-perk">
+                <div class="plan-perk__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                </div>
+                <div class="plan-perk__text">
+                  <strong>Dedicated case manager</strong>
+                  <span>Joe K. handles your file personally. One point of contact, always.</span>
+                </div>
+              </div>
+
+              <div class="plan-perk">
+                <div class="plan-perk__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                </div>
+                <div class="plan-perk__text">
+                  <strong>Monthly progress reports</strong>
+                  <span>See exactly how much you've paid off and what's left. Full transparency.</span>
+                </div>
+              </div>
+
+              <div class="plan-perk">
+                <div class="plan-perk__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="plan-perk__text">
+                  <strong>Set and forget</strong>
+                  <span>Auto-payment once a month. You don't need to think about debt again.</span>
                 </div>
               </div>
             </div>
@@ -448,11 +488,11 @@
             </div>
 
             <button type="button" class="btn btn--primary btn--next btn--glow" id="planNextBtn">
-              Get started now
+              Get started for <span id="planCtaAmount"></span>/mo
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </button>
 
-            <p class="plan-disclaimer">No lock-in contracts. Cancel anytime.</p>
+            <p class="plan-disclaimer">No lock-in contracts. Cancel anytime. 5-day cooling-off period.</p>
           </div>
         </div>
 

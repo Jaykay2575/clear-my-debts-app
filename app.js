@@ -625,7 +625,10 @@
 
     // Monthly payment hero
     document.getElementById('planMonthlyAmount').textContent = formatCurrency(tier.amount) + '/mo';
-    document.getElementById('planMonthlyInline').textContent = formatCurrency(tier.amount);
+
+    // CTA button amount
+    var ctaAmountEl = document.getElementById('planCtaAmount');
+    if (ctaAmountEl) ctaAmountEl.textContent = formatCurrency(tier.amount);
 
     // Summary rows
     document.getElementById('planCreditorCount').textContent = creditors.length;

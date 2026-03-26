@@ -1159,6 +1159,71 @@ body {
   margin-top: 6px;
 }
 
+/* --- Plan Perks (What's Included) --- */
+.plan-includes {
+  margin-bottom: 20px;
+}
+
+.plan-includes__heading {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.plan-perk {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+  animation: fadeUp 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.plan-perk:nth-child(2) { animation-delay: 50ms; }
+.plan-perk:nth-child(3) { animation-delay: 100ms; }
+.plan-perk:nth-child(4) { animation-delay: 150ms; }
+.plan-perk:nth-child(5) { animation-delay: 200ms; }
+.plan-perk:nth-child(6) { animation-delay: 250ms; }
+.plan-perk:nth-child(7) { animation-delay: 300ms; }
+
+.plan-perk:last-child {
+  border-bottom: none;
+}
+
+.plan-perk__icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  background: var(--color-primary-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  margin-top: 1px;
+}
+
+.plan-perk__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.plan-perk__text strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.plan-perk__text span {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
 /* --- Plan Summary Rows --- */
 .plan-summary {
   background: var(--color-surface);
