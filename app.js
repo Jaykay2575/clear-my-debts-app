@@ -673,8 +673,321 @@
   }
 
   // =============================================
+  //  STEP 7: SERVICE AGREEMENT
+  // =============================================
+  var agreeBtn = document.getElementById('agreeBtn');
+  var agreementScroll = document.getElementById('agreementScroll');
+  var scrollHint = document.getElementById('scrollHint');
+
+  // Enable agree button when scrolled to bottom
+  if (agreementScroll) {
+    agreementScroll.addEventListener('scroll', function () {
+      var el = agreementScroll;
+      var atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 30;
+      if (atBottom) {
+        agreeBtn.disabled = false;
+        if (scrollHint) scrollHint.classList.add('hidden');
+      }
+    });
+  }
+
+  function showAgreement() {
+    var setupFee = getSetupFee(creditors.length);
+    var firstName = firstNameInput.value.trim();
+    var today = new Date().toLocaleDateString('en-AU', { timeZone: 'Australia/Sydney', day: 'numeric', month: 'long', year: 'numeric' });
+
+    document.getElementById('agreeClientName').textContent = firstName;
+    document.getElementById('agreeDate').textContent = today;
+    document.getElementById('agreeSetupFee').textContent = formatCurrency(setupFee);
+
+    // Reset scroll and button
+    agreeBtn.disabled = true;
+    if (agreementScroll) agreementScroll.scrollTop = 0;
+    if (scrollHint) scrollHint.classList.remove('hidden');
+
+    goToStep('agreement');
+    track('agreement_viewed', { setup_fee: setupFee });
+  }
+
+  agreeBtn.addEventListener('click', function () {
+    track('agreement_signed', {});
+    showATA();
+  });
+
+  // =============================================
+  //  STEP 8: AUTHORITY TO ACT + SIGNATURE
+  // =============================================
+  var ataSubmitBtn = document.getElementById('ataSubmitBtn');
+  var ataFullName = document.getElementById('ataFullName');
+  var ataDob = document.getElementById('ataDob');
+  var ataAddress = document.getElementById('ataAddress');
+  var ataLicence = document.getElementById('ataLicence');
+  var sigCanvas = document.getElementById('sigCanvas');
+  var sigClearBtn = document.getElementById('sigClear');
+  var sigCtx = sigCanvas ? sigCanvas.getContext('2d') : null;
+  var hasSig = false;
+  var isDrawing = false;
+
+  // Signature pad setup
+  function initSigCanvas() {
+    if (!sigCanvas || !sigCtx) return;
+    var rect = sigCanvas.getBoundingClientRect();
+    var dpr = window.devicePixelRatio || 1;
+    sigCanvas.width = rect.width * dpr;
+    sigCanvas.height = rect.height * dpr;
+    sigCtx.scale(dpr, dpr);
+    sigCtx.strokeStyle = '#14b8a6';
+    sigCtx.lineWidth = 2.5;
+    sigCtx.lineCap = 'round';
+    sigCtx.lineJoin = 'round';
+  }
+
+  function getPos(e) {
+    var rect = sigCanvas.getBoundingClientRect();
+    var touch = e.touches ? e.touches[0] : e;
+    return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+  }
+
+  if (sigCanvas) {
+    sigCanvas.addEventListener('mousedown', function (e) {
+      isDrawing = true;
+      var pos = getPos(e);
+      sigCtx.beginPath();
+      sigCtx.moveTo(pos.x, pos.y);
+    });
+    sigCanvas.addEventListener('mousemove', function (e) {
+      if (!isDrawing) return;
+      var pos = getPos(e);
+      sigCtx.lineTo(pos.x, pos.y);
+      sigCtx.stroke();
+      hasSig = true;
+      sigCanvas.parentElement.classList.add('has-sig');
+      validateATA();
+    });
+    sigCanvas.addEventListener('mouseup', function () { isDrawing = false; });
+    sigCanvas.addEventListener('mouseleave', function () { isDrawing = false; });
+
+    // Touch events
+    sigCanvas.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      isDrawing = true;
+      var pos = getPos(e);
+      sigCtx.beginPath();
+      sigCtx.moveTo(pos.x, pos.y);
+    }, { passive: false });
+    sigCanvas.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+      if (!isDrawing) return;
+      var pos = getPos(e);
+      sigCtx.lineTo(pos.x, pos.y);
+      sigCtx.stroke();
+      hasSig = true;
+      sigCanvas.parentElement.classList.add('has-sig');
+      validateATA();
+    }, { passive: false });
+    sigCanvas.addEventListener('touchend', function () { isDrawing = false; });
+  }
+
+  if (sigClearBtn) {
+    sigClearBtn.addEventListener('click', function () {
+      sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+      hasSig = false;
+      sigCanvas.parentElement.classList.remove('has-sig');
+      validateATA();
+    });
+  }
+
+  function validateATA() {
+    var nameOk = ataFullName && ataFullName.value.trim().length >= 3;
+    var dobOk = ataDob && ataDob.value.length > 0;
+    var addrOk = ataAddress && ataAddress.value.trim().length >= 5;
+    var licOk = ataLicence && ataLicence.value.trim().length >= 3;
+    ataSubmitBtn.disabled = !(nameOk && dobOk && addrOk && licOk && hasSig);
+  }
+
+  if (ataFullName) ataFullName.addEventListener('input', validateATA);
+  if (ataDob) ataDob.addEventListener('input', validateATA);
+  if (ataAddress) ataAddress.addEventListener('input', validateATA);
+  if (ataLicence) ataLicence.addEventListener('input', validateATA);
+
+  var ataScrollEl = document.getElementById('ataScroll');
+  var ataScrollHint = document.getElementById('ataScrollHint');
+  if (ataScrollEl) {
+    ataScrollEl.addEventListener('scroll', function () {
+      var atBottom = ataScrollEl.scrollHeight - ataScrollEl.scrollTop - ataScrollEl.clientHeight < 30;
+      if (atBottom && ataScrollHint) ataScrollHint.classList.add('hidden');
+    });
+  }
+
+  function showATA() {
+    // Pre-fill name from step 3
+    if (ataFullName) ataFullName.value = firstNameInput.value.trim();
+    if (ataScrollEl) ataScrollEl.scrollTop = 0;
+    if (ataScrollHint) ataScrollHint.classList.remove('hidden');
+    ataSubmitBtn.disabled = true;
+
+    goToStep('ata');
+
+    // Init canvas after step is visible
+    setTimeout(initSigCanvas, 100);
+    track('ata_viewed', {});
+  }
+
+  // ATA Submit
+  if (ataSubmitBtn) {
+    ataSubmitBtn.addEventListener('click', function () {
+      if (ataSubmitBtn.disabled) return;
+      ataSubmitBtn.classList.add('loading');
+      ataSubmitBtn.disabled = true;
+
+      var sigData = sigCanvas.toDataURL('image/png');
+      var setupFee = getSetupFee(creditors.length);
+      var tier = getPaymentTier(Math.max(
+        parseCurrencyInput(monthlyIncomeInput.value) -
+        (function () { var t = 0; billInputs.forEach(function (i) { t += parseCurrencyInput(i.value); }); return t; })(),
+        0
+      ));
+      var totalDebt = creditors.reduce(function (sum, c) { return sum + c.amount; }, 0);
+      var creditorLines = creditors.map(function (c, i) {
+        return (i + 1) + '. ' + c.name + ' — ' + formatCurrency(c.amount);
+      }).join('\n');
+      var timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' });
+
+      var payload = {
+        '_subject': 'SIGNED — ' + ataFullName.value.trim() + ' — ATA + Service Agreement',
+        '_template': 'table',
+        '_captcha': false,
+        '_autoresponse': 'Thank you for signing with Clear My Debts. Your case manager Joe K. will be in touch within 1-2 business days. Call us anytime on 1300 998 168.',
+        '--- AGREEMENTS ---': '',
+        'Service Agreement': 'SIGNED on ' + timestamp,
+        'Authority to Act': 'SIGNED on ' + timestamp,
+        '--- CLIENT DETAILS ---': '',
+        'Full Legal Name': ataFullName.value.trim(),
+        'Date of Birth': ataDob.value,
+        'Address': ataAddress.value.trim(),
+        'Driver Licence': ataLicence.value.trim(),
+        'Phone': phoneInput.value.trim(),
+        'Email': emailInput.value.trim(),
+        '--- PLAN DETAILS ---': '',
+        'Creditors': creditorLines,
+        'Total Debt': formatCurrency(totalDebt),
+        'Setup Fee': formatCurrency(setupFee) + ' (incl. GST)',
+        'Ongoing Fee': '20% of each payment (excl. GST)',
+        'Monthly Payment': formatCurrency(tier.amount) + '/mo',
+        '--- META ---': '',
+        'Signed At': timestamp,
+        'Signature': 'Captured electronically (data URI attached)',
+        'Source': utm.source,
+        'Campaign': utm.campaign
+      };
+
+      track('ata_signed', {
+        creditor_count: creditors.length,
+        total_debt: totalDebt,
+        setup_fee: setupFee,
+        monthly_payment: tier.amount
+      });
+
+      fetch('https://formsubmit.co/ajax/support@clearmydebts.com.au', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function () { showAllDone(); })
+        .catch(function () { showAllDone(); });
+    });
+  }
+
+  // =============================================
+  //  STEP 9: ALL DONE
+  // =============================================
+  function showAllDone() {
+    goToStep('alldone');
+    track('onboarding_complete', {
+      creditor_count: creditors.length,
+      utm_source: utm.source,
+      utm_campaign: utm.campaign
+    });
+  }
+
+  // =============================================
+  //  PAYMENT FLOW: Redirect to signing after Stripe
+  // =============================================
+  // When user clicks "Start my plan", we store data in sessionStorage
+  // so when they return from Stripe, we can resume the signing flow.
+  var paymentLinkEl = document.getElementById('paymentLink');
+  if (paymentLinkEl) {
+    paymentLinkEl.addEventListener('click', function () {
+      // Save form data to sessionStorage
+      var income = parseCurrencyInput(monthlyIncomeInput.value);
+      var totalBills = 0;
+      billInputs.forEach(function (input) {
+        totalBills += parseCurrencyInput(input.value);
+      });
+
+      var formData = {
+        creditors: creditors,
+        income: income,
+        totalBills: totalBills,
+        firstName: firstNameInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        email: emailInput.value.trim(),
+        bills: {}
+      };
+      billInputs.forEach(function (input) {
+        formData.bills[input.id] = parseCurrencyInput(input.value);
+      });
+
+      try {
+        sessionStorage.setItem('cmd_form_data', JSON.stringify(formData));
+        sessionStorage.setItem('cmd_return_to_sign', 'true');
+      } catch (e) {}
+
+      // Also immediately go to agreement (in case they don't leave the page)
+      setTimeout(function () {
+        showAgreement();
+      }, 500);
+    });
+  }
+
+  // Check if returning from Stripe
+  function checkStripeReturn() {
+    try {
+      if (sessionStorage.getItem('cmd_return_to_sign') === 'true') {
+        var data = JSON.parse(sessionStorage.getItem('cmd_form_data'));
+        if (data) {
+          // Restore form data
+          creditors = data.creditors || [];
+          renderCreditors();
+          monthlyIncomeInput.value = data.income ? data.income.toLocaleString('en-AU') : '';
+          firstNameInput.value = data.firstName || '';
+          phoneInput.value = data.phone || '';
+          emailInput.value = data.email || '';
+
+          if (data.bills) {
+            Object.keys(data.bills).forEach(function (id) {
+              var el = document.getElementById(id);
+              if (el && data.bills[id]) el.value = data.bills[id].toLocaleString('en-AU');
+            });
+          }
+
+          sessionStorage.removeItem('cmd_return_to_sign');
+          sessionStorage.removeItem('cmd_form_data');
+
+          // Go straight to signing
+          showAgreement();
+          return true;
+        }
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  // =============================================
   //  INIT
   // =============================================
-  updateProgress(1);
+  if (!checkStripeReturn()) {
+    updateProgress(1);
+  }
 
 })();

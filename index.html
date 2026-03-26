@@ -523,6 +523,251 @@
           </div>
         </div>
 
+        <!-- Step 7: Service Agreement -->
+        <div class="step" data-step="agreement">
+          <div class="step__content">
+            <p class="step__label">Step 1 of 2 — Sign your agreement</p>
+            <h2 class="step__title">Service Agreement &amp; Fee Disclosure</h2>
+            <p class="step__subtitle">Please read the agreement below, then tap "I Agree" to continue.</p>
+
+            <div class="doc-scroll" id="agreementScroll">
+              <div class="doc-scroll__inner">
+                <div class="doc-section">
+                  <p class="doc-meta">Clear My Debts Australia Pty Ltd<br>P: 1300 998 168 | E: support@clearmydebts.com.au<br>Credit License Number: 568532</p>
+                  <p class="doc-meta">To: <strong id="agreeClientName"></strong><br>Date: <strong id="agreeDate"></strong></p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>1. Services Provided</h3>
+                  <p>Clear My Debts provides debt management and negotiation services, which may include:</p>
+                  <ul>
+                    <li>Liaising with creditors on your behalf</li>
+                    <li>Requesting balances, statements, and hardship consideration</li>
+                    <li>Negotiating repayment arrangements or settlements</li>
+                    <li>Administering agreed payment arrangements</li>
+                    <li>Providing ongoing account management and support</li>
+                  </ul>
+                  <p>Clear My Debts is not a lender, does not provide legal advice, and does not guarantee outcomes.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>2. Fees &amp; Charges</h3>
+                  <h4>2.1 Setup Fee</h4>
+                  <p>A once-off setup fee applies to cover the initial work required to establish your debt management plan.</p>
+                  <p class="doc-highlight">Setup Fee Amount: <strong id="agreeSetupFee"></strong> (incl. GST)</p>
+                  <p>This fee is determined based on the complexity, number, and total value of your debts. It covers: file setup and assessment, creditor identification and contact, initial negotiations and hardship requests, and preparation of documentation.</p>
+
+                  <h4>2.2 Ongoing Management Fee</h4>
+                  <p>An ongoing management fee applies for administering your debt management plan.</p>
+                  <p class="doc-highlight">Ongoing Fee: <strong>20%</strong> of each payment made by you (exclusive of GST)</p>
+                  <p>This fee covers: ongoing creditor communication, monitoring and administering payment arrangements, adjustments to plans as circumstances change, and account management and support.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>3. Payment Allocation Order</h3>
+                  <p><strong>While the Setup Fee is outstanding:</strong> A portion of each payment will be allocated toward the setup fee. The remaining portion will be distributed to creditors.</p>
+                  <p><strong>Once the Setup Fee is paid in full:</strong> 100% of funds (less the ongoing management fee) will be distributed to creditors in accordance with agreed arrangements.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>4. Payment Method</h3>
+                  <p>Payments may be made by direct debit or another agreed method. You authorise Clear My Debts to debit payments in accordance with your selected payment frequency.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>5. No Guarantee of Results</h3>
+                  <p>You acknowledge and agree that Clear My Debts does not guarantee reductions, settlements, or acceptance by creditors. Creditors are not obliged to agree to proposed arrangements. Fees charged relate to services performed, not guaranteed outcomes.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>6. Client Obligations</h3>
+                  <p>You agree to: provide accurate and up-to-date information, notify Clear My Debts of any changes to your financial circumstances, maintain agreed payments where reasonably possible, and communicate promptly if hardship worsens.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>7. Termination &amp; Fees on Cancellation</h3>
+                  <p>You may terminate this agreement at any time by providing written notice. Upon termination, all fees already charged or accrued remain payable and are non-refundable. If any portion of the setup fee remains outstanding, Clear My Debts reserves the right to invoice you for the outstanding balance.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>8. Cooling-Off Period</h3>
+                  <p>You may cancel this agreement within <strong>5 business days</strong> of acceptance by providing written notice. Clear My Debts may still charge for services already performed during the cooling-off period.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>9. Complaints &amp; Dispute Resolution</h3>
+                  <p>Clear My Debts is a member of the Australian Financial Complaints Authority (AFCA). If you have a complaint, contact us at support@clearmydebts.com.au. If unresolved, you may lodge a complaint with AFCA.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>10. General Terms</h3>
+                  <p>This agreement is governed by the laws of Australia. This document forms part of your overall engagement with Clear My Debts.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-scroll-hint" id="scrollHint">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              Scroll to read full agreement
+            </div>
+
+            <button type="button" class="btn btn--primary btn--glow" id="agreeBtn" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+              I Agree to the Service Agreement
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 8: Authority to Act -->
+        <div class="step" data-step="ata">
+          <div class="step__content">
+            <p class="step__label">Step 2 of 2 — Authority to Act</p>
+            <h2 class="step__title">Authorise us to act on your behalf</h2>
+            <p class="step__subtitle">This allows us to contact your creditors and negotiate on your behalf.</p>
+
+            <div class="doc-scroll" id="ataScroll">
+              <div class="doc-scroll__inner">
+                <div class="doc-section">
+                  <p class="doc-meta">Clear My Debts Australia Pty Ltd<br>P: 1300 998 168 | E: support@clearmydebts.com.au<br>Credit License Number: 568532</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>1. Authority to Act</h3>
+                  <p>I authorise Clear My Debts Australia Pty Ltd to collect, use, and disclose my personal and financial information for the purpose of providing debt management and financial hardship assistance services as requested by me.</p>
+                  <p>I appoint Clear My Debts as my authorised representative to act on my behalf for the limited purposes of:</p>
+                  <ul>
+                    <li>Contacting my creditors, debt collectors, or account managers to confirm balances, account details, and payment status</li>
+                    <li>Requesting financial hardship arrangements, including temporary payment pauses or reduced repayments</li>
+                    <li>Requesting that creditor communication be reduced or redirected to Clear My Debts</li>
+                    <li>Receiving and responding to correspondence relating to my debts</li>
+                    <li>Discussing and administering repayment arrangements with my creditors</li>
+                  </ul>
+                  <p>This authority does not permit Clear My Debts to apply for credit, provide lending services, or enter into any legal proceedings on my behalf.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>2. Consent to Obtain Credit Information</h3>
+                  <p>I consent to Clear My Debts obtaining my credit history information from one or more credit reporting bodies (including Equifax, Experian, and Illion) for the limited purpose of identifying existing debts, confirming creditor details, and assisting with debt management.</p>
+                  <p>I understand that this information will be used only to help identify my current credit obligations, will not be used for lending or marketing, and will not be shared with third parties except as required to provide the services requested.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>3. Privacy &amp; Communication Consent</h3>
+                  <p>I authorise Clear My Debts to obtain relevant personal and financial information from my creditors where reasonably necessary. I consent to receiving notices and documents electronically where permitted by law.</p>
+                </div>
+
+                <div class="doc-section">
+                  <h3>4. Duration of Authority</h3>
+                  <p>This authority remains effective until revoked by me in writing.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-scroll-hint" id="ataScrollHint">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              Scroll to read full document
+            </div>
+
+            <!-- Personal Details -->
+            <div class="ata-fields">
+              <p class="ata-fields__heading">Your details</p>
+
+              <div class="field-group">
+                <label for="ataFullName" class="field-label">Full legal name</label>
+                <input type="text" id="ataFullName" class="input" placeholder="As it appears on your ID" autocomplete="name" required>
+              </div>
+
+              <div class="field-group">
+                <label for="ataDob" class="field-label">Date of birth</label>
+                <input type="date" id="ataDob" class="input" required>
+              </div>
+
+              <div class="field-group">
+                <label for="ataAddress" class="field-label">Residential address</label>
+                <input type="text" id="ataAddress" class="input" placeholder="Street, Suburb, State, Postcode" autocomplete="street-address" required>
+              </div>
+
+              <div class="field-group">
+                <label for="ataLicence" class="field-label">Driver licence number</label>
+                <input type="text" id="ataLicence" class="input" placeholder="Licence number" required>
+              </div>
+
+              <!-- Signature Pad -->
+              <div class="field-group">
+                <label class="field-label">Your signature</label>
+                <div class="sig-pad-wrap">
+                  <canvas id="sigCanvas" class="sig-canvas"></canvas>
+                  <button type="button" class="sig-clear" id="sigClear">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                    Clear
+                  </button>
+                </div>
+                <p class="sig-hint">Draw your signature above using your finger or mouse</p>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn--primary btn--glow" id="ataSubmitBtn" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+              <span class="btn__text">Sign &amp; Submit</span>
+              <span class="btn__loading" aria-hidden="true">
+                <svg class="spinner" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg>
+                Submitting...
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 9: All Done -->
+        <div class="step" data-step="alldone">
+          <div class="step__content step__content--success">
+            <div class="success-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <h2 class="step__title">You're all set</h2>
+            <p class="step__subtitle success-text">Your agreements are signed and your payment plan is active. Joe K. will start negotiating with your creditors right away.</p>
+
+            <div class="done-checklist">
+              <div class="done-checklist__item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                <span>Financial snapshot submitted</span>
+              </div>
+              <div class="done-checklist__item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                <span>Payment plan activated</span>
+              </div>
+              <div class="done-checklist__item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                <span>Service agreement signed</span>
+              </div>
+              <div class="done-checklist__item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                <span>Authority to Act signed</span>
+              </div>
+            </div>
+
+            <div class="done-next">
+              <h3>What happens now?</h3>
+              <p>Joe K. will review your file and begin contacting your creditors within 1–2 business days. You'll receive updates via email and SMS. If you need anything, reach out anytime.</p>
+            </div>
+
+            <div class="assigned-card">
+              <div class="assigned-card__avatar"><span>J</span></div>
+              <div class="assigned-card__info">
+                <p class="assigned-card__name">Joe K.</p>
+                <p class="assigned-card__role">Your Case Manager</p>
+                <p class="assigned-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <a href="tel:0488841102" class="card-link">0488 841 102</a>
+                </p>
+                <p class="assigned-card__detail">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <a href="tel:1300998168" class="card-link">1300 998 168</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </form>
     </main>
 
