@@ -66,7 +66,7 @@
     'Swift Recovery', 'DCS Group', 'EC Credit Control',
     'Phillips & Cohen', 'Atradius Collections',
     'Elite Collection Services', 'Midstate CreditCollect',
-    'Fox Symes', 'Way Forward Debt Solutions',
+    'Fox Symes', 'Way Forward Debt Solutions', 'ARMA', 'Collections Corp',
     // Government & other
     'ATO', 'Centrelink', 'HECS-HELP', 'Council Rates',
     'Strata', 'Real estate agent', 'Private lender'
