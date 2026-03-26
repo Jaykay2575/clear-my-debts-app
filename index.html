@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Snapshot — Clear My Debts Australia</title>
+  <meta name="description" content="Submit your financial snapshot so we can negotiate with your creditors. Free, confidential, takes 2 minutes.">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Financial Snapshot — Clear My Debts Australia">
+  <meta property="og:description" content="Submit your financial snapshot so we can negotiate with your creditors. Free & confidential.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B850XEL7ZR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-B850XEL7ZR');
+  </script>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header__inner">
+        <img src="./assets/logo.svg" alt="Clear My Debts" class="header__logo" width="40" height="40">
+        <div class="header__badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>Free &amp; Confidential</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Social Proof -->
+    <div class="social-proof">
+      <div class="social-proof__inner">
+        <div class="social-proof__stat">
+          <span class="social-proof__number">2,000+</span>
+          <span class="social-proof__label">Australians helped</span>
+        </div>
+        <div class="social-proof__divider"></div>
+        <div class="social-proof__stat">
+          <span class="social-proof__number">4.9<span class="star">&#9733;</span></span>
+          <span class="social-proof__label">rating</span>
+        </div>
+        <div class="social-proof__divider"></div>
+        <div class="social-proof__stat">
+          <span class="social-proof__number">ACL 568532</span>
+          <span class="social-proof__label">Licensed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress__bar" id="progressBar"></div>
+    </div>
+
+    <!-- Form Container -->
+    <main class="main">
+      <form id="snapshotForm" class="form" novalidate>
+
+        <!-- Step 1: Creditors -->
+        <div class="step active" data-step="1">
+          <div class="step__content">
+            <p class="step__label">Step 1 of 3</p>
+            <h1 class="step__title">Who do you owe<br>money to?</h1>
+            <p class="step__subtitle">Add each creditor — we'll use this to negotiate on your behalf.</p>
+
+            <!-- Add Creditor Form -->
+            <div class="creditor-add">
+              <div class="field-group">
+                <label for="creditorName" class="field-label">Creditor name</label>
+                <div class="autocomplete-wrap">
+                  <input
+                    type="text"
+                    id="creditorName"
+                    class="input"
+                    placeholder="e.g. CommBank, Afterpay..."
+                    autocomplete="off"
+                  >
+                  <div class="autocomplete-list" id="autocompleteList"></div>
+                </div>
+              </div>
+              <div class="field-group">
+                <label for="creditorAmount" class="field-label">Amount owed</label>
+                <div class="input-currency">
+                  <span class="input-currency__symbol">$</span>
+                  <input
+                    type="text"
+                    id="creditorAmount"
+                    class="input input--currency"
+                    placeholder="0"
+                    inputmode="numeric"
+                  >
+                </div>
+              </div>
+              <button type="button" class="btn btn--secondary" id="addCreditorBtn" disabled>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Add Creditor</span>
+              </button>
+            </div>
+
+            <!-- Creditor List -->
+            <div class="creditor-list" id="creditorList"></div>
+
+            <!-- Running Total -->
+            <div class="debt-total" id="debtTotal" style="display:none;">
+              <span class="debt-total__label">Total debt</span>
+              <span class="debt-total__amount" id="debtTotalAmount">$0</span>
+            </div>
+
+            <!-- Continue -->
+            <button type="button" class="btn btn--primary btn--next" id="step1Next" style="display:none;">
+              Continue
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Income & Bills -->
+        <div class="step" data-step="2">
+          <div class="step__content">
+            <p class="step__label">Step 2 of 3</p>
+            <h2 class="step__title">Your income<br>and bills</h2>
+            <p class="step__subtitle">Just the basics — helps us work out what you can afford.</p>
+
+            <div class="field-group">
+              <label for="monthlyIncome" class="field-label">Monthly income (after tax)</label>
+              <div class="input-currency">
+                <span class="input-currency__symbol">$</span>
+                <input
+                  type="text"
+                  id="monthlyIncome"
+                  class="input input--currency"
+                  placeholder="0"
+                  inputmode="numeric"
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="bills-section">
+              <p class="bills-section__heading">Monthly bills</p>
+
+              <div class="bill-row">
+                <div class="bill-row__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <label for="billRent" class="bill-row__label">Rent / Mortgage</label>
+                <div class="input-currency input-currency--sm">
+                  <span class="input-currency__symbol">$</span>
+                  <input type="text" id="billRent" class="input input--currency input--sm" placeholder="0" inputmode="numeric" data-bill>
+                </div>
+              </div>
+
+              <div class="bill-row">
+                <div class="bill-row__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                </div>
+                <label for="billFood" class="bill-row__label">Food &amp; Groceries</label>
+                <div class="input-currency input-currency--sm">
+                  <span class="input-currency__symbol">$</span>
+                  <input type="text" id="billFood" class="input input--currency input--sm" placeholder="0" inputmode="numeric" data-bill>
+                </div>
+              </div>
+
+              <div class="bill-row">
+                <div class="bill-row__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                <label for="billUtilities" class="bill-row__label">Utilities (power, water, gas)</label>
+                <div class="input-currency input-currency--sm">
+                  <span class="input-currency__symbol">$</span>
+                  <input type="text" id="billUtilities" class="input input--currency input--sm" placeholder="0" inputmode="numeric" data-bill>
+                </div>
+              </div>
+
+              <div class="bill-row">
+                <div class="bill-row__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-2-2.7-3.2C12 5.7 10.5 5 9 5H5c-1.3 0-2.6.5-3.5 1.5L0 8v6c0 1.1.9 2 2 2h1"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+                </div>
+                <label for="billTransport" class="bill-row__label">Transport (fuel, rego, PT)</label>
+                <div class="input-currency input-currency--sm">
+                  <span class="input-currency__symbol">$</span>
+                  <input type="text" id="billTransport" class="input input--currency input--sm" placeholder="0" inputmode="numeric" data-bill>
+                </div>
+              </div>
+
+              <div class="bill-row">
+                <div class="bill-row__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                </div>
+                <label for="billPhone" class="bill-row__label">Phone &amp; Internet</label>
+                <div class="input-currency input-currency--sm">
+                  <span class="input-currency__symbol">$</span>
+                  <input type="text" id="billPhone" class="input input--currency input--sm" placeholder="0" inputmode="numeric" data-bill>
+                </div>
+              </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="budget-summary" id="budgetSummary">
+              <div class="budget-summary__row">
+                <span>Total bills</span>
+                <span id="totalBills">$0</span>
+              </div>
+              <div class="budget-summary__row budget-summary__row--highlight">
+                <span>Left over after bills</span>
+                <span id="leftOver">$0/month</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn--primary btn--next" id="step2Next" disabled>
+              Continue
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Contact Details -->
+        <div class="step" data-step="3">
+          <div class="step__content">
+            <p class="step__label">Step 3 of 3 — almost done</p>
+            <h2 class="step__title">Almost done — how do we reach you?</h2>
+            <p class="step__subtitle">We'll review your snapshot and be in touch within 24 hours.</p>
+
+            <div class="field-group">
+              <label for="firstName" class="field-label">First name</label>
+              <input
+                type="text"
+                id="firstName"
+                class="input"
+                placeholder="Your first name"
+                autocomplete="given-name"
+                required
+              >
+            </div>
+
+            <div class="field-group">
+              <label for="phone" class="field-label">Phone</label>
+              <input
+                type="tel"
+                id="phone"
+                class="input"
+                placeholder="04XX XXX XXX"
+                autocomplete="tel"
+                inputmode="tel"
+                required
+              >
+            </div>
+
+            <div class="field-group">
+              <label for="email" class="field-label">Email</label>
+              <input
+                type="email"
+                id="email"
+                class="input"
+                placeholder="you@example.com"
+                autocomplete="email"
+                inputmode="email"
+                required
+              >
+            </div>
+
+            <!-- Consent -->
+            <div class="consent-box">
+              <label class="consent-toggle">
+                <input type="checkbox" id="consentCheck">
+                <span class="consent-toggle__switch"></span>
+                <span class="consent-toggle__label">I consent to Clear My Debts contacting me about my debt options.</span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--submit" id="submitBtn" disabled>
+              <span class="btn__text">Submit My Snapshot</span>
+              <span class="btn__loading" aria-hidden="true">
+                <svg class="spinner" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg>
+                Sending...
+              </span>
+            </button>
+
+            <!-- What happens next -->
+            <div class="next-steps">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <p>Joe K. will review your details and call within 24 hours. No pressure, no obligation.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Your Results -->
+        <div class="step" data-step="results">
+          <div class="step__content">
+            <div class="results-header">
+              <div class="results-check">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/></svg>
+              </div>
+              <p class="results-header__label">Snapshot received</p>
+              <h2 class="step__title">Here's your<br>situation, <span id="resultsName"></span></h2>
+            </div>
+
+            <!-- Debt Breakdown -->
+            <div class="results-card">
+              <div class="results-card__header">
+                <span class="results-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                </span>
+                <span>Your debts</span>
+              </div>
+              <div id="resultsCreditorList" class="results-card__list"></div>
+              <div class="results-card__total">
+                <span>Total debt</span>
+                <span id="resultsTotalDebt" class="results-card__total-amount"></span>
+              </div>
+            </div>
+
+            <!-- Budget Snapshot -->
+            <div class="results-card">
+              <div class="results-card__header">
+                <span class="results-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </span>
+                <span>Your monthly budget</span>
+              </div>
+              <div class="results-budget-rows">
+                <div class="results-budget-row">
+                  <span>Income</span>
+                  <span id="resultsIncome" class="results-budget-row__val"></span>
+                </div>
+                <div class="results-budget-row">
+                  <span>Bills</span>
+                  <span id="resultsBills" class="results-budget-row__val results-budget-row__val--muted"></span>
+                </div>
+                <div class="results-budget-row results-budget-row--surplus">
+                  <span>Left over each month</span>
+                  <span id="resultsSurplus" class="results-budget-row__val"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Urgency Message -->
+            <div class="results-urgency">
+              <div class="results-urgency__pulse"></div>
+              <p id="resultsUrgencyMsg">With <strong id="resultsCreditorCount"></strong> creditors chasing you, interest and fees are adding up every single day you wait.</p>
+            </div>
+
+            <button type="button" class="btn btn--primary btn--next btn--glow" id="resultsNextBtn">
+              Show me how to fix this
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 5: Your Plan -->
+        <div class="step" data-step="plan">
+          <div class="step__content">
+            <p class="step__label">Your personalised plan</p>
+            <h2 class="step__title">One payment.<br>We handle the rest.</h2>
+            <p class="step__subtitle">We negotiate with every creditor to reduce what you owe. You make one simple payment a month — we distribute it for you.</p>
+
+            <!-- How it Works -->
+            <div class="plan-steps">
+              <div class="plan-step">
+                <div class="plan-step__number">1</div>
+                <div class="plan-step__text">
+                  <strong>We negotiate</strong>
+                  <span>We contact all <span id="planCreditorCount"></span> creditors to freeze interest, stop calls, and reduce your balances.</span>
+                </div>
+              </div>
+              <div class="plan-step">
+                <div class="plan-step__number">2</div>
+                <div class="plan-step__text">
+                  <strong>One monthly payment</strong>
+                  <span>You pay one affordable amount each month. We split it between your creditors.</span>
+                </div>
+              </div>
+              <div class="plan-step">
+                <div class="plan-step__number">3</div>
+                <div class="plan-step__text">
+                  <strong>Debt cleared</strong>
+                  <span>Watch your balances drop to zero. No more stress, no more collector calls.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fee Card -->
+            <div class="plan-fee-card">
+              <div class="plan-fee-card__header">
+                <span>Your setup fee</span>
+                <span id="planSetupFee" class="plan-fee-card__amount"></span>
+              </div>
+              <p class="plan-fee-card__note">Spread across your monthly payments — nothing extra upfront.</p>
+              <div class="plan-fee-card__divider"></div>
+              <div class="plan-fee-card__row">
+                <span>Creditors managed</span>
+                <span id="planCreditorNum"></span>
+              </div>
+              <div class="plan-fee-card__row">
+                <span>Total debt</span>
+                <span id="planTotalDebt"></span>
+              </div>
+              <div class="plan-fee-card__row">
+                <span>Available monthly</span>
+                <span id="planSurplus"></span>
+              </div>
+            </div>
+
+            <!-- Trust Reinforcement -->
+            <div class="plan-trust">
+              <div class="plan-trust__item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                <span>Licensed under ACL 568532</span>
+              </div>
+              <div class="plan-trust__item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                <span>2,000+ Australians helped</span>
+              </div>
+              <div class="plan-trust__item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                <span>No judgement, just results</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn--primary btn--next btn--glow" id="planNextBtn">
+              Get started now
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+
+            <p class="plan-disclaimer">No lock-in contracts. Cancel anytime.</p>
+          </div>
+        </div>
+
+        <!-- Step 6: Get Started (Payment) -->
+        <div class="step" data-step="payment">
+          <div class="step__content step__content--success">
+            <div class="payment-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <h2 class="step__title">Let's get you<br>debt-free</h2>
+            <p class="step__subtitle success-text">Your case manager Joe K. will set up your personalised payment plan. Tap below to lock in your spot.</p>
+
+            <!-- Summary Mini -->
+            <div class="payment-summary">
+              <div class="payment-summary__row">
+                <span>Creditors</span>
+                <span id="payCreditorsNum"></span>
+              </div>
+              <div class="payment-summary__row">
+                <span>Total debt</span>
+                <span id="payTotalDebt"></span>
+              </div>
+              <div class="payment-summary__row">
+                <span>Setup fee</span>
+                <span id="paySetupFee"></span>
+              </div>
+              <div class="payment-summary__row payment-summary__row--highlight">
+                <span>Available monthly</span>
+                <span id="paySurplus"></span>
+              </div>
+            </div>
+
+            <!-- CTA -->
+            <a href="#" id="paymentLink" class="btn btn--primary btn--glow btn--large" target="_blank" rel="noopener noreferrer">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              Start my plan
+            </a>
+
+            <p class="payment-secure">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Secure payment via Stripe
+            </p>
+
+            <!-- Or talk to someone -->
+            <div class="payment-alt">
+              <p>Prefer to chat first?</p>
+              <div class="assigned-card">
+                <div class="assigned-card__avatar">
+                  <span>J</span>
+                </div>
+                <div class="assigned-card__info">
+                  <p class="assigned-card__name">Joe K.</p>
+                  <p class="assigned-card__role">Case Manager</p>
+                  <p class="assigned-card__detail">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:0488841102" class="card-link">0488 841 102</a>
+                  </p>
+                  <p class="assigned-card__detail">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:1300998168" class="card-link">1300 998 168</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </main>
+
+    <!-- Trust Bar -->
+    <footer class="trust-bar">
+      <div class="trust-bar__inner">
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>256-bit encrypted</span>
+        </div>
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>ACL Licensed</span>
+        </div>
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>100% free</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
