@@ -369,6 +369,13 @@
             <h2 class="step__title">One payment.<br>We handle the rest.</h2>
             <p class="step__subtitle">We negotiate with every creditor to reduce what you owe. You make one simple payment a month — we distribute it for you.</p>
 
+            <!-- Monthly Payment Hero -->
+            <div class="plan-monthly-card">
+              <span class="plan-monthly-card__label">Your monthly repayment</span>
+              <span class="plan-monthly-card__value" id="planMonthlyAmount"></span>
+              <span class="plan-monthly-card__note">That's it. One payment, every month.</span>
+            </div>
+
             <!-- How it Works -->
             <div class="plan-steps">
               <div class="plan-step">
@@ -382,7 +389,7 @@
                 <div class="plan-step__number">2</div>
                 <div class="plan-step__text">
                   <strong>One monthly payment</strong>
-                  <span>You pay one affordable amount each month. We split it between your creditors.</span>
+                  <span>You pay <span id="planMonthlyInline"></span> each month. We split it between your creditors.</span>
                 </div>
               </div>
               <div class="plan-step">
@@ -394,25 +401,30 @@
               </div>
             </div>
 
-            <!-- Fee Card -->
-            <div class="plan-fee-card">
-              <div class="plan-fee-card__header">
-                <span>Your setup fee</span>
-                <span id="planSetupFee" class="plan-fee-card__amount"></span>
-              </div>
-              <p class="plan-fee-card__note">Spread across your monthly payments — nothing extra upfront.</p>
-              <div class="plan-fee-card__divider"></div>
-              <div class="plan-fee-card__row">
+            <!-- Summary rows -->
+            <div class="plan-summary">
+              <div class="plan-summary__row">
                 <span>Creditors managed</span>
                 <span id="planCreditorNum"></span>
               </div>
-              <div class="plan-fee-card__row">
+              <div class="plan-summary__row">
                 <span>Total debt</span>
                 <span id="planTotalDebt"></span>
               </div>
-              <div class="plan-fee-card__row">
-                <span>Available monthly</span>
+              <div class="plan-summary__row">
+                <span>Your surplus</span>
                 <span id="planSurplus"></span>
+              </div>
+            </div>
+
+            <!-- Establishment Fee (secondary, non-scary) -->
+            <div class="plan-establishment">
+              <div class="plan-establishment__row">
+                <div class="plan-establishment__info">
+                  <span class="plan-establishment__label">One-off establishment fee</span>
+                  <span class="plan-establishment__note">Spread across your monthly payments — nothing extra upfront.</span>
+                </div>
+                <span id="planSetupFee" class="plan-establishment__amount"></span>
               </div>
             </div>
 

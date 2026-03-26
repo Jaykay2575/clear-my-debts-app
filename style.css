@@ -1121,62 +1121,108 @@ body {
   line-height: 1.5;
 }
 
-/* --- Plan Fee Card --- */
-.plan-fee-card {
-  background: var(--color-surface);
+/* --- Plan Monthly Hero Card --- */
+.plan-monthly-card {
+  text-align: center;
+  padding: 24px 20px;
+  background: var(--color-primary-glow);
   border: 1.5px solid rgba(20, 184, 166, 0.25);
   border-radius: var(--radius-lg);
-  padding: 20px;
-  margin-bottom: 20px;
-  animation: fadeUp 350ms 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  margin-bottom: 24px;
+  animation: fadeUp 350ms 100ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.plan-fee-card__header {
+.plan-monthly-card__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.plan-monthly-card__value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.plan-monthly-card__note {
+  display: block;
+  font-size: 14px;
+  color: var(--color-text-faint);
+  margin-top: 6px;
+}
+
+/* --- Plan Summary Rows --- */
+.plan-summary {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  margin-bottom: 12px;
+}
+
+.plan-summary__row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
+  padding: 6px 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
 }
 
-.plan-fee-card__header span:first-child {
+.plan-summary__row span:last-child {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* --- Establishment Fee (subdued) --- */
+.plan-establishment {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+}
+
+.plan-establishment__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.plan-establishment__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.plan-establishment__label {
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text-muted);
 }
 
-.plan-fee-card__amount {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--color-primary);
-  letter-spacing: -0.02em;
-}
-
-.plan-fee-card__note {
-  font-size: 13px;
+.plan-establishment__note {
+  font-size: 12px;
   color: var(--color-text-faint);
-  margin: 0 0 14px;
   line-height: 1.4;
 }
 
-.plan-fee-card__divider {
-  height: 1px;
-  background: var(--color-border);
-  margin-bottom: 12px;
-}
-
-.plan-fee-card__row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 0;
-  font-size: 14px;
+.plan-establishment__amount {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
   color: var(--color-text-muted);
-}
-
-.plan-fee-card__row span:last-child {
-  font-weight: 600;
-  color: var(--color-text);
+  flex-shrink: 0;
 }
 
 /* --- Plan Trust Items --- */

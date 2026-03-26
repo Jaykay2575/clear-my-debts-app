@@ -596,15 +596,23 @@
     });
     var surplus = income - totalBills;
     var setupFee = getSetupFee(creditors.length);
+    var tier = getPaymentTier(Math.max(surplus, 0));
 
+    // Monthly payment hero
+    document.getElementById('planMonthlyAmount').textContent = formatCurrency(tier.amount) + '/mo';
+    document.getElementById('planMonthlyInline').textContent = formatCurrency(tier.amount);
+
+    // Summary rows
     document.getElementById('planCreditorCount').textContent = creditors.length;
-    document.getElementById('planSetupFee').textContent = formatCurrency(setupFee);
     document.getElementById('planCreditorNum').textContent = creditors.length;
     document.getElementById('planTotalDebt').textContent = formatCurrency(totalDebt);
     document.getElementById('planSurplus').textContent = formatCurrency(surplus) + '/mo';
 
+    // Establishment fee (subdued, at bottom)
+    document.getElementById('planSetupFee').textContent = formatCurrency(setupFee);
+
     goToStep('plan');
-    track('plan_viewed', { setup_fee: setupFee, creditor_count: creditors.length });
+    track('plan_viewed', { setup_fee: setupFee, monthly_payment: tier.amount, creditor_count: creditors.length });
   }
 
   planNextBtn.addEventListener('click', function () {
