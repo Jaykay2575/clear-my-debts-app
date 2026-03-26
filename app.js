@@ -885,7 +885,7 @@
         '_subject': 'SIGNED — ' + ataFullName.value.trim() + ' — ATA + Service Agreement',
         '_template': 'table',
         '_captcha': false,
-        '_autoresponse': 'Thank you for signing with Clear My Debts. Your case manager Joe K. will be in touch within 1-2 business days. Call us anytime on 1300 998 168.',
+        '_autoresponse': 'Thank you for signing with Clear My Debts. Your case manager Joe will be in touch within 1-2 business days. Call us anytime on 1300 998 168.',
         '--- AGREEMENTS ---': '',
         'Service Agreement': 'SIGNED on ' + timestamp,
         'Authority to Act': 'SIGNED on ' + timestamp,
