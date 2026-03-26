@@ -1151,12 +1151,14 @@
   // =============================================
   //  PAYMENT FLOW: Redirect to signing after Stripe
   // =============================================
-  // When user clicks "Start my plan", we store data in sessionStorage
-  // so when they return from Stripe, we can resume the signing flow.
+  // When user clicks "Start my plan", we save data to localStorage
+  // (persists across page navigations, unlike sessionStorage).
+  // When Stripe redirects them back, we detect the saved data and
+  // jump straight to the Service Agreement signing step.
   var paymentLinkEl = document.getElementById('paymentLink');
   if (paymentLinkEl) {
     paymentLinkEl.addEventListener('click', function () {
-      // Save form data to sessionStorage
+      // Save form data to localStorage
       var income = parseCurrencyInput(monthlyIncomeInput.value);
       var totalBills = 0;
       billInputs.forEach(function (input) {
@@ -1177,22 +1179,19 @@
       });
 
       try {
-        sessionStorage.setItem('cmd_form_data', JSON.stringify(formData));
-        sessionStorage.setItem('cmd_return_to_sign', 'true');
+        localStorage.setItem('cmd_form_data', JSON.stringify(formData));
+        localStorage.setItem('cmd_return_to_sign', 'true');
       } catch (e) {}
 
-      // Also immediately go to agreement (in case they don't leave the page)
-      setTimeout(function () {
-        showAgreement();
-      }, 500);
+      // Let Stripe open — don't show agreement yet, wait for redirect back
     });
   }
 
   // Check if returning from Stripe
   function checkStripeReturn() {
     try {
-      if (sessionStorage.getItem('cmd_return_to_sign') === 'true') {
-        var data = JSON.parse(sessionStorage.getItem('cmd_form_data'));
+      if (localStorage.getItem('cmd_return_to_sign') === 'true') {
+        var data = JSON.parse(localStorage.getItem('cmd_form_data'));
         if (data) {
           // Restore form data
           creditors = data.creditors || [];
@@ -1209,8 +1208,9 @@
             });
           }
 
-          sessionStorage.removeItem('cmd_return_to_sign');
-          sessionStorage.removeItem('cmd_form_data');
+          // Clear the flag so it doesn't trigger again
+          localStorage.removeItem('cmd_return_to_sign');
+          localStorage.removeItem('cmd_form_data');
 
           // Go straight to signing
           showAgreement();
