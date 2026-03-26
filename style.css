@@ -1222,6 +1222,34 @@ body {
   animation: scaleIn 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Monthly Amount Card */
+.payment-amount-card {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background: var(--color-primary-glow);
+  border: 1.5px solid rgba(20, 184, 166, 0.25);
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+}
+
+.payment-amount-card__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.payment-amount-card__value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+}
+
 .payment-summary {
   width: 100%;
   background: var(--color-surface);

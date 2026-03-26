@@ -450,6 +450,12 @@
             <h2 class="step__title">Let's get you<br>debt-free</h2>
             <p class="step__subtitle success-text">Your case manager Joe K. will set up your personalised payment plan. Tap below to lock in your spot.</p>
 
+            <!-- Monthly Amount Highlight -->
+            <div class="payment-amount-card">
+              <span class="payment-amount-card__label">Your monthly payment</span>
+              <span class="payment-amount-card__value" id="payMonthlyAmount"></span>
+            </div>
+
             <!-- Summary Mini -->
             <div class="payment-summary">
               <div class="payment-summary__row">
@@ -461,11 +467,11 @@
                 <span id="payTotalDebt"></span>
               </div>
               <div class="payment-summary__row">
-                <span>Setup fee</span>
+                <span>Setup fee (included)</span>
                 <span id="paySetupFee"></span>
               </div>
               <div class="payment-summary__row payment-summary__row--highlight">
-                <span>Available monthly</span>
+                <span>Your surplus</span>
                 <span id="paySurplus"></span>
               </div>
             </div>

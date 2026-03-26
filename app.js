@@ -615,20 +615,22 @@
   //  STEP 6: PAYMENT
   // =============================================
 
-  // Stripe payment links — Joe will create these in Stripe and we map them here.
-  // For now, these are placeholder URLs. Joe replaces them with his actual Stripe links.
-  var STRIPE_LINKS = {
-    tier1: '#',  // 1-2 creditors
-    tier2: '#',  // 3-4 creditors
-    tier3: '#',  // 5-7 creditors
-    tier4: '#'   // 8+ creditors
-  };
+  // Stripe payment links — mapped by monthly surplus bracket
+  var PAYMENT_TIERS = [
+    { maxSurplus: 299,  amount: 80,  link: 'https://buy.stripe.com/bJe8wP28sdGp3iC4tb9EI08' },
+    { maxSurplus: 499,  amount: 100, link: 'https://buy.stripe.com/cNi9ATaEYfOxg5o1gZ9EI09' },
+    { maxSurplus: 799,  amount: 150, link: 'https://buy.stripe.com/6oU28rcN67i16uO1gZ9EI0a' },
+    { maxSurplus: 1199, amount: 200, link: 'https://buy.stripe.com/eVq9AT3cw6dX1au2l39EI0f' },
+    { maxSurplus: 1999, amount: 300, link: 'https://buy.stripe.com/cNi9AT00k0TD1au6Bj9EI0e' },
+    { maxSurplus: 2999, amount: 400, link: 'https://buy.stripe.com/9B65kDfZidGpbP88Jr9EI0d' },
+    { maxSurplus: Infinity, amount: 500, link: 'https://buy.stripe.com/5kQ00j5kE0TDcTc7Fn9EI0c' }
+  ];
 
-  function getStripeLink(count) {
-    if (count <= 2) return STRIPE_LINKS.tier1;
-    if (count <= 4) return STRIPE_LINKS.tier2;
-    if (count <= 7) return STRIPE_LINKS.tier3;
-    return STRIPE_LINKS.tier4;
+  function getPaymentTier(surplus) {
+    for (var i = 0; i < PAYMENT_TIERS.length; i++) {
+      if (surplus <= PAYMENT_TIERS[i].maxSurplus) return PAYMENT_TIERS[i];
+    }
+    return PAYMENT_TIERS[PAYMENT_TIERS.length - 1];
   }
 
   function showPayment() {
@@ -640,30 +642,26 @@
     });
     var surplus = income - totalBills;
     var setupFee = getSetupFee(creditors.length);
+    var tier = getPaymentTier(Math.max(surplus, 0));
 
     document.getElementById('payCreditorsNum').textContent = creditors.length;
     document.getElementById('payTotalDebt').textContent = formatCurrency(totalDebt);
     document.getElementById('paySetupFee').textContent = formatCurrency(setupFee);
     document.getElementById('paySurplus').textContent = formatCurrency(surplus) + '/mo';
+    document.getElementById('payMonthlyAmount').textContent = formatCurrency(tier.amount) + '/mo';
 
-    // Set Stripe link
-    var link = getStripeLink(creditors.length);
+    // Set Stripe link based on surplus bracket
     var paymentLinkEl = document.getElementById('paymentLink');
-    paymentLinkEl.href = link;
-
-    // If no Stripe link set yet, show a fallback message
-    if (link === '#') {
-      paymentLinkEl.addEventListener('click', function (e) {
-        if (paymentLinkEl.href.endsWith('#')) {
-          e.preventDefault();
-          // Fallback: call Joe
-          window.location.href = 'tel:0488841102';
-        }
-      });
-    }
+    paymentLinkEl.href = tier.link;
 
     goToStep('payment');
-    track('payment_viewed', { setup_fee: setupFee, creditor_count: creditors.length, total_debt: totalDebt });
+    track('payment_viewed', {
+      setup_fee: setupFee,
+      creditor_count: creditors.length,
+      total_debt: totalDebt,
+      monthly_payment: tier.amount,
+      surplus: surplus
+    });
   }
 
   // =============================================
