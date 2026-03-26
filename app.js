@@ -881,6 +881,16 @@
         'Campaign': utm.campaign
       };
 
+      // Generate ATA PDF
+      generateAtaPdf({
+        fullName: ataFullName.value.trim(),
+        dob: ataDob.value,
+        address: ataAddress.value.trim(),
+        licence: ataLicence.value.trim(),
+        signatureData: sigData,
+        timestamp: timestamp
+      });
+
       track('ata_signed', {
         creditor_count: creditors.length,
         total_debt: totalDebt,
@@ -895,6 +905,206 @@
       })
         .then(function () { showAllDone(); })
         .catch(function () { showAllDone(); });
+    });
+  }
+
+  // =============================================
+  //  ATA PDF GENERATION
+  // =============================================
+  var ataPdfBlob = null;
+  var ataPdfFilename = '';
+
+  function generateAtaPdf(clientData) {
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    var w = doc.internal.pageSize.getWidth();
+    var margin = 20;
+    var contentW = w - margin * 2;
+    var y = 20;
+
+    // Header
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text('Clear My Debts Australia Pty Ltd', margin, y);
+    y += 5;
+    doc.text('P: 1300 998 168 | E: support@clearmydebts.com.au', margin, y);
+    y += 5;
+    doc.text('Credit License Number: 568532', margin, y);
+    y += 12;
+
+    // Title
+    doc.setFontSize(18);
+    doc.setTextColor(30, 30, 30);
+    doc.setFont(undefined, 'bold');
+    doc.text('AUTHORITY TO ACT & PRIVACY CONSENT', margin, y);
+    y += 4;
+    doc.setDrawColor(20, 184, 166);
+    doc.setLineWidth(0.8);
+    doc.line(margin, y, w - margin, y);
+    y += 12;
+
+    // Section 1
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.text('1. Authority to Act', margin, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(60, 60, 60);
+    var s1 = 'I authorise Clear My Debts Australia Pty Ltd to collect, use, and disclose my personal and financial information for the purpose of providing debt management and financial hardship assistance services as requested by me.';
+    var s1Lines = doc.splitTextToSize(s1, contentW);
+    doc.text(s1Lines, margin, y);
+    y += s1Lines.length * 5 + 4;
+
+    var s1b = 'I appoint Clear My Debts as my authorised representative to act on my behalf for the limited purposes of:';
+    var s1bLines = doc.splitTextToSize(s1b, contentW);
+    doc.text(s1bLines, margin, y);
+    y += s1bLines.length * 5 + 3;
+
+    var bullets = [
+      'Contacting my creditors, debt collectors, or account managers to confirm balances, account details, and payment status',
+      'Requesting financial hardship arrangements, including temporary payment pauses or reduced repayments',
+      'Requesting that creditor communication be reduced or redirected to Clear My Debts',
+      'Receiving and responding to correspondence relating to my debts',
+      'Discussing and administering repayment arrangements with my creditors'
+    ];
+    bullets.forEach(function (b) {
+      var bLines = doc.splitTextToSize('\u2022  ' + b, contentW - 5);
+      doc.text(bLines, margin + 3, y);
+      y += bLines.length * 5 + 2;
+    });
+    y += 2;
+
+    var s1c = 'This authority does not permit Clear My Debts to apply for credit, provide lending services, or enter into any legal proceedings on my behalf.';
+    var s1cLines = doc.splitTextToSize(s1c, contentW);
+    doc.text(s1cLines, margin, y);
+    y += s1cLines.length * 5 + 8;
+
+    // Section 2
+    doc.setFontSize(12);
+    doc.setTextColor(30, 30, 30);
+    doc.setFont(undefined, 'bold');
+    doc.text('2. Consent to Obtain Credit Information', margin, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(60, 60, 60);
+    var s2 = 'I consent to Clear My Debts obtaining my credit history information from one or more credit reporting bodies (including Equifax, Experian, and Illion) for the limited purpose of identifying existing debts, confirming creditor details, and assisting with debt management and financial hardship support.';
+    var s2Lines = doc.splitTextToSize(s2, contentW);
+    doc.text(s2Lines, margin, y);
+    y += s2Lines.length * 5 + 8;
+
+    // Section 3
+    doc.setFontSize(12);
+    doc.setTextColor(30, 30, 30);
+    doc.setFont(undefined, 'bold');
+    doc.text('3. Privacy & Communication Consent', margin, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(60, 60, 60);
+    var s3 = 'I authorise Clear My Debts to obtain relevant personal and financial information from my creditors where reasonably necessary. I consent to receiving notices and documents electronically where permitted by law.';
+    var s3Lines = doc.splitTextToSize(s3, contentW);
+    doc.text(s3Lines, margin, y);
+    y += s3Lines.length * 5 + 8;
+
+    // Section 4
+    doc.setFontSize(12);
+    doc.setTextColor(30, 30, 30);
+    doc.setFont(undefined, 'bold');
+    doc.text('4. Duration of Authority', margin, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(60, 60, 60);
+    doc.text('This authority remains effective until revoked by me in writing.', margin, y);
+    y += 14;
+
+    // Client Details Box
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    var boxY = y;
+    doc.rect(margin, boxY, contentW, 60);
+
+    doc.setFontSize(10);
+    doc.setTextColor(30, 30, 30);
+    doc.setFont(undefined, 'bold');
+    y = boxY + 8;
+    doc.text('FULL NAME:', margin + 5, y);
+    doc.setFont(undefined, 'normal');
+    doc.text(clientData.fullName, margin + 40, y);
+    y += 10;
+
+    doc.setFont(undefined, 'bold');
+    doc.text('DATE OF BIRTH:', margin + 5, y);
+    doc.setFont(undefined, 'normal');
+    doc.text(clientData.dob, margin + 48, y);
+    y += 10;
+
+    doc.setFont(undefined, 'bold');
+    doc.text('ADDRESS:', margin + 5, y);
+    doc.setFont(undefined, 'normal');
+    var addrLines = doc.splitTextToSize(clientData.address, contentW - 50);
+    doc.text(addrLines, margin + 34, y);
+    y += Math.max(addrLines.length * 5, 5) + 5;
+
+    doc.setFont(undefined, 'bold');
+    doc.text('DRIVER LICENCE:', margin + 5, y);
+    doc.setFont(undefined, 'normal');
+    doc.text(clientData.licence, margin + 52, y);
+    y += 10;
+
+    doc.setFont(undefined, 'bold');
+    doc.text('SIGNATURE:', margin + 5, y);
+
+    // Embed signature image
+    if (clientData.signatureData) {
+      try {
+        doc.addImage(clientData.signatureData, 'PNG', margin + 40, y - 6, 60, 20);
+      } catch (e) {}
+    }
+
+    y = boxY + 65;
+
+    // Signed date
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 100);
+    doc.text('Signed electronically on ' + clientData.timestamp, margin, y);
+    y += 8;
+
+    // Footer
+    doc.setDrawColor(20, 184, 166);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, w - margin, y);
+    y += 6;
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text('Clear My Debts Australia Pty Ltd | ACL 568532 | ABN/ACN 680 367 006', margin, y);
+    y += 4;
+    doc.text('P: 1300 998 168 | E: support@clearmydebts.com.au', margin, y);
+
+    // Store for download
+    ataPdfFilename = 'ATA-' + clientData.fullName.replace(/\s+/g, '-') + '.pdf';
+    ataPdfBlob = doc.output('blob');
+
+    return doc;
+  }
+
+  // Download button
+  var downloadAtaBtn = document.getElementById('downloadAtaBtn');
+  if (downloadAtaBtn) {
+    downloadAtaBtn.addEventListener('click', function () {
+      if (ataPdfBlob) {
+        var url = URL.createObjectURL(ataPdfBlob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = ataPdfFilename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        track('ata_pdf_downloaded', {});
+      }
     });
   }
 

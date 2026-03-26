@@ -19,6 +19,9 @@
 
   <link rel="stylesheet" href="./style.css">
 
+  <!-- jsPDF for ATA PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-B850XEL7ZR"></script>
   <script>
@@ -744,6 +747,12 @@
                 <span>Authority to Act signed</span>
               </div>
             </div>
+
+            <!-- Download ATA PDF -->
+            <button type="button" class="btn btn--outline" id="downloadAtaBtn" style="margin-bottom:16px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download your Authority to Act
+            </button>
 
             <div class="done-next">
               <h3>What happens now?</h3>
