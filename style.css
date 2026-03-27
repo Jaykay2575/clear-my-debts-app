@@ -331,6 +331,43 @@ body {
   box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
 }
 
+.intro-chat__call {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition);
+  width: 100%;
+  margin-top: 8px;
+}
+
+.intro-chat__call svg {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.intro-chat__call:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-glow);
+}
+
+.intro-chat__hours {
+  font-size: 12px;
+  color: var(--color-text-faint);
+  text-align: center;
+  margin: 8px 0 0;
+}
+
 /* --- Input Fields --- */
 .field-group {
   margin-bottom: 16px;
