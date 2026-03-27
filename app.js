@@ -152,6 +152,17 @@
   }
 
   // =============================================
+  //  INTRO / PITCH OPENER
+  // =============================================
+  var introStartBtn = document.getElementById('introStartBtn');
+  if (introStartBtn) {
+    introStartBtn.addEventListener('click', function () {
+      track('intro_start_clicked', {});
+      goToStep(1);
+    });
+  }
+
+  // =============================================
   //  STEP 1: CREDITORS
   // =============================================
 
