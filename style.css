@@ -1968,3 +1968,182 @@ input[type="date"].input {
   background: var(--color-border-hover);
   border-radius: 3px;
 }
+
+/* =============================================
+   NEW INTRO: Question-First Layout
+   ============================================= */
+
+.intro-question {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.intro-question__eyebrow {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+.intro-question__headline {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(26px, 6vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+.intro-question__sub {
+  font-size: 15px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* Debt Range Grid */
+.debt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.debt-grid__btn {
+  appearance: none;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-bg-card, #1a1a1e);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  padding: 18px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.debt-grid__btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(45, 212, 172, 0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.debt-grid__btn:hover,
+.debt-grid__btn:focus-visible {
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(45, 212, 172, 0.12);
+}
+.debt-grid__btn:hover::before,
+.debt-grid__btn:focus-visible::before {
+  opacity: 1;
+}
+.debt-grid__btn:active {
+  transform: translateY(0);
+  background: rgba(45, 212, 172, 0.08);
+  border-color: var(--color-accent);
+}
+.debt-grid__btn.selected {
+  background: rgba(45, 212, 172, 0.1);
+  border-color: var(--color-accent);
+}
+.debt-grid__btn span {
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 640px) {
+  .debt-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* Savings Hook */
+.savings-hook {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: var(--color-bg-raised, #141416);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+}
+.savings-hook__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(45, 212, 172, 0.12);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  color: var(--color-accent);
+}
+.savings-hook__text {
+  font-size: 15px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+.savings-hook__text strong {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* Testimonial */
+.intro-testimonial {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 0 8px;
+}
+.intro-testimonial__quote {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+.intro-testimonial__author {
+  font-size: 13px;
+  color: var(--color-text-dim, #636366);
+  font-weight: 500;
+}
+
+/* Chat Compact */
+.intro-chat-compact {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+.intro-chat-compact__label {
+  font-size: 13px;
+  color: var(--color-text-dim, #636366);
+  margin-bottom: 10px;
+}
+.intro-chat-compact__links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.intro-chat-compact__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised, #141416);
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.intro-chat-compact__link:hover {
+  border-color: var(--color-border-hover);
+  color: var(--color-text);
+}
+.intro-chat-compact__link--wa:hover {
+  border-color: #25d366;
+  color: #25d366;
+}

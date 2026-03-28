@@ -152,8 +152,32 @@
   }
 
   // =============================================
-  //  INTRO / PITCH OPENER
+  //  INTRO / QUESTION-FIRST (DEBT RANGE GRID)
   // =============================================
+  var debtGridBtns = document.querySelectorAll('.debt-grid__btn');
+  debtGridBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var range = btn.getAttribute('data-range');
+
+      // Visual feedback
+      debtGridBtns.forEach(function (b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+
+      // Track event
+      track('debt_range_selected', { debt_range: range });
+      track('intro_start_clicked', {});
+
+      // Store selected range for later use
+      window.__selectedDebtRange = range;
+
+      // Brief pause for tactile feel, then advance
+      setTimeout(function () {
+        goToStep(1);
+      }, 250);
+    });
+  });
+
+  // Keep legacy button handler as fallback
   var introStartBtn = document.getElementById('introStartBtn');
   if (introStartBtn) {
     introStartBtn.addEventListener('click', function () {
