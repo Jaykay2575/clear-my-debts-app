@@ -629,11 +629,21 @@
       utm_campaign: utm.campaign
     });
 
-    // Send to FormSubmit (primary)
-    fetch('https://formsubmit.co/ajax/support@clearmydebts.com.au', {
+    // Send to Web3Forms (primary)
+    var w3payload = Object.assign({}, payload, {
+      access_key: 'f8acfff0-024e-49b5-bd6c-9c66ac7ed627',
+      from_name: 'Clear My Debts App',
+      subject: payload['_subject'] || 'Financial Snapshot'
+    });
+    delete w3payload['_subject'];
+    delete w3payload['_template'];
+    delete w3payload['_captcha'];
+    delete w3payload['_autoresponse'];
+
+    fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(w3payload)
     })
       .then(function (res) {
         if (!res.ok) throw new Error('Submit failed');
@@ -643,7 +653,6 @@
         showSuccess();
       })
       .catch(function () {
-        // Show success even on error — backup to Sheets catches the data
         showSuccess();
       });
 
@@ -1082,11 +1091,21 @@
         monthly_payment: tier.amount
       });
 
-      // Send to FormSubmit (primary)
-      fetch('https://formsubmit.co/ajax/support@clearmydebts.com.au', {
+      // Send to Web3Forms (primary)
+      var w3payload2 = Object.assign({}, payload, {
+        access_key: 'f8acfff0-024e-49b5-bd6c-9c66ac7ed627',
+        from_name: 'Clear My Debts App',
+        subject: payload['_subject'] || 'SIGNED — ATA + Service Agreement'
+      });
+      delete w3payload2['_subject'];
+      delete w3payload2['_template'];
+      delete w3payload2['_captcha'];
+      delete w3payload2['_autoresponse'];
+
+      fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(w3payload2)
       })
         .then(function () { showAllDone(); })
         .catch(function () { showAllDone(); });
