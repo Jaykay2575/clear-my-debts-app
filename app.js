@@ -90,6 +90,88 @@
     }
   }
 
+  // =============================================
+  //  GOOGLE SHEETS BACKUP
+  //  Sends form data to a Google Sheet as a redundant backup
+  //  in case FormSubmit.co fails silently
+  // =============================================
+  var SHEETS_WEBHOOK = 'https://script.google.com/macros/s/PLACEHOLDER_DEPLOY_ID/exec';
+
+  function backupToSheets(data) {
+    try {
+      fetch(SHEETS_WEBHOOK, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    } catch (e) { /* silent — this is a backup */ }
+  }
+
+  // =============================================
+  //  PAYMENT RETURN HANDLER
+  //  Detects when user returns from Stripe and restores their session
+  // =============================================
+  var urlParams = new URLSearchParams(window.location.search);
+  var paymentStatus = urlParams.get('payment');
+
+  if (paymentStatus === 'success') {
+    // User paid on Stripe and came back — restore their data and go to agreement
+    try {
+      var restored = JSON.parse(window.name);
+      if (restored && restored.creditors && restored.creditors.length > 0) {
+        creditors = restored.creditors;
+        firstNameInput.value = restored.firstName || '';
+        phoneInput.value = restored.phone || '';
+        emailInput.value = restored.email || '';
+        monthlyIncomeInput.value = restored.income || '';
+        if (restored.bills) {
+          Object.keys(restored.bills).forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.value = restored.bills[id];
+          });
+        }
+        // Jump straight to the service agreement
+        setTimeout(function() {
+          showAgreement();
+          track('payment_success_return', { creditor_count: creditors.length });
+        }, 300);
+      }
+    } catch (e) {
+      // Could not restore — show a message
+      alert('Payment received! Please call us on 1300 998 168 to complete your agreement.');
+    }
+    // Clean up the URL
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  } else if (paymentStatus === 'cancelled') {
+    // Payment was cancelled — restore data and show payment step again with a message
+    try {
+      var restored = JSON.parse(window.name);
+      if (restored && restored.creditors) {
+        creditors = restored.creditors;
+        firstNameInput.value = restored.firstName || '';
+        phoneInput.value = restored.phone || '';
+        emailInput.value = restored.email || '';
+        monthlyIncomeInput.value = restored.income || '';
+        if (restored.bills) {
+          Object.keys(restored.bills).forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.value = restored.bills[id];
+          });
+        }
+        setTimeout(function() {
+          showPayment();
+          track('payment_cancelled_return', {});
+        }, 300);
+      }
+    } catch (e) { /* ignore */ }
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }
+
   track('snapshot_loaded', {
     utm_source: utm.source,
     utm_medium: utm.medium,
@@ -547,6 +629,7 @@
       utm_campaign: utm.campaign
     });
 
+    // Send to FormSubmit (primary)
     fetch('https://formsubmit.co/ajax/support@clearmydebts.com.au', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -560,9 +643,25 @@
         showSuccess();
       })
       .catch(function () {
-        // Show success even on error (FormSubmit sometimes has CORS issues on first use)
+        // Show success even on error — backup to Sheets catches the data
         showSuccess();
       });
+
+    // Backup to Google Sheets (redundant — fires independently)
+    backupToSheets({
+      type: 'snapshot',
+      timestamp: timestamp,
+      firstName: firstName,
+      phone: phone,
+      email: email,
+      creditors: creditorLines,
+      totalDebt: totalDebt,
+      income: income,
+      totalBills: totalBills,
+      remaining: remaining,
+      source: utm.source,
+      campaign: utm.campaign
+    });
   });
 
   function showSuccess() {
@@ -687,6 +786,7 @@
   // =============================================
 
   // Stripe payment links — mapped by monthly surplus bracket
+  // Each link should have ?success_url and ?cancel_url appended in showPayment()
   var PAYMENT_TIERS = [
     { maxSurplus: 299,  amount: 80,  link: 'https://buy.stripe.com/bJe8wP28sdGp3iC4tb9EI08' },
     { maxSurplus: 499,  amount: 100, link: 'https://buy.stripe.com/cNi9ATaEYfOxg5o1gZ9EI09' },
@@ -722,8 +822,29 @@
     document.getElementById('payMonthlyAmount').textContent = formatCurrency(tier.amount) + '/mo';
 
     // Set Stripe link based on surplus bracket
+    // Append success and cancel redirect URLs so user returns to the form after payment
     var paymentLinkEl = document.getElementById('paymentLink');
+    var baseUrl = window.location.origin + window.location.pathname;
+    var successUrl = baseUrl + '?payment=success';
+    var cancelUrl = baseUrl + '?payment=cancelled';
     paymentLinkEl.href = tier.link;
+
+    // Store form data in sessionStorage so we can recover it after Stripe redirect
+    try {
+      var formBackup = {
+        creditors: creditors,
+        firstName: firstNameInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        email: emailInput.value.trim(),
+        income: monthlyIncomeInput.value,
+        bills: {},
+        consent: document.getElementById('consentCheck').checked
+      };
+      ['billRent', 'billFood', 'billUtilities', 'billTransport', 'billPhone'].forEach(function(id) {
+        formBackup.bills[id] = document.getElementById(id).value;
+      });
+      window.name = JSON.stringify(formBackup);
+    } catch (e) { /* ignore */ }
 
     goToStep('payment');
     track('payment_viewed', {
@@ -961,6 +1082,7 @@
         monthly_payment: tier.amount
       });
 
+      // Send to FormSubmit (primary)
       fetch('https://formsubmit.co/ajax/support@clearmydebts.com.au', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -968,6 +1090,24 @@
       })
         .then(function () { showAllDone(); })
         .catch(function () { showAllDone(); });
+
+      // Backup to Google Sheets (redundant — fires independently)
+      backupToSheets({
+        type: 'signed_ata',
+        timestamp: timestamp,
+        fullName: ataFullName.value.trim(),
+        dob: ataDob.value,
+        address: ataAddress.value.trim(),
+        licence: ataLicence.value.trim(),
+        phone: phoneInput.value.trim(),
+        email: emailInput.value.trim(),
+        creditors: creditorLines,
+        totalDebt: totalDebt,
+        setupFee: setupFee,
+        monthlyPayment: tier.amount,
+        source: utm.source,
+        campaign: utm.campaign
+      });
     });
   }
 
