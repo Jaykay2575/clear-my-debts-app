@@ -138,8 +138,8 @@
         }, 300);
       }
     } catch (e) {
-      // Could not restore — show a message
-      alert('Payment received! Please call us on 1300 998 168 to complete your agreement.');
+      // Could not restore — show a friendly redirect message
+      alert('Payment received — thank you! You\'re being redirected to sign your agreement now.');
     }
     // Clean up the URL
     if (window.history && window.history.replaceState) {
