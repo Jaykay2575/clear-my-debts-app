@@ -676,6 +676,7 @@
     try {
       fetch('https://cmd-companion.vercel.app/api/create-contact', {
         method: 'POST',
+        mode: 'cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           firstname: firstName,
@@ -691,6 +692,7 @@
             // Create deal linked to the contact
             fetch('https://cmd-companion.vercel.app/api/create-deal', {
               method: 'POST',
+              mode: 'cors',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 dealname: firstName + ' — $' + totalDebt.toLocaleString('en-AU') + ' Debt Plan',
