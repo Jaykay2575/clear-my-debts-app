@@ -671,6 +671,40 @@
       source: utm.source,
       campaign: utm.campaign
     });
+
+    // Create contact + deal in HubSpot via CMD Companion API
+    try {
+      fetch('https://cmd-companion.vercel.app/api/create-contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstname: firstName,
+          email: email,
+          phone: phone,
+          consent_given: document.getElementById('consentCheck').checked,
+          sms_consent: document.getElementById('consentCheck').checked
+        })
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (contactResult) {
+          if (contactResult.success && contactResult.contact) {
+            // Create deal linked to the contact
+            fetch('https://cmd-companion.vercel.app/api/create-deal', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                dealname: firstName + ' — $' + totalDebt.toLocaleString('en-AU') + ' Debt Plan',
+                total_debt: String(totalDebt),
+                creditor_details: creditorLines,
+                number_of_creditors: String(creditors.length),
+                lead_source: utm.source || 'website',
+                contactId: contactResult.contact.id
+              })
+            }).catch(function () { /* silent */ });
+          }
+        })
+        .catch(function () { /* silent — HubSpot creation is best-effort */ });
+    } catch (e) { /* silent */ }
   });
 
   function showSuccess() {
