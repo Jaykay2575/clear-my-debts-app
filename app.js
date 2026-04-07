@@ -813,7 +813,8 @@
     document.getElementById('planCreditorCount').textContent = creditors.length;
     document.getElementById('planCreditorNum').textContent = creditors.length;
     document.getElementById('planTotalDebt').textContent = formatCurrency(totalDebt);
-    document.getElementById('planSurplus').textContent = formatCurrency(surplus) + '/mo';
+    var planSurplusEl = document.getElementById('planSurplus');
+    if (planSurplusEl) planSurplusEl.textContent = formatCurrency(surplus) + '/mo';
 
     // Setup fee still tracked internally for agreement/Stripe but not shown on plan page
 
