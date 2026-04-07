@@ -1311,7 +1311,7 @@ body {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: 18px;
+  padding: 20px;
   margin-bottom: 20px;
 }
 
@@ -1321,34 +1321,109 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--color-text-muted);
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .plan-covers__list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .plan-covers__item {
   display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.plan-covers__icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  background: rgba(13, 148, 136, 0.1);
+  display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.plan-covers__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.plan-covers__text strong {
   font-size: 14px;
+  font-weight: 600;
   color: var(--color-text);
 }
 
-.plan-covers__item svg {
+.plan-covers__text span {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.plan-covers__bottom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+  font-weight: 500;
+  color: #0d9488;
+}
+
+.plan-covers__bottom svg {
   flex-shrink: 0;
 }
 
-.plan-covers__note {
+/* --- Testimonial on plan page --- */
+.plan-testimonial {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.plan-testimonial__stars {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.plan-testimonial__quote {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text);
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.plan-testimonial__author {
   font-size: 12px;
   color: var(--color-text-faint);
-  margin-top: 14px;
-  line-height: 1.5;
-  padding-top: 12px;
-  border-top: 1px solid var(--color-border);
+  font-weight: 500;
+}
+
+/* Summary highlight row */
+.plan-summary__row--highlight {
+  background: rgba(13, 148, 136, 0.08);
+  border-radius: 8px;
+  padding: 10px 12px !important;
+  margin: -4px -12px;
+}
+
+.plan-summary__row--highlight span:last-child {
+  color: #0d9488;
+  font-weight: 700;
 }
 
 /* --- Plan Perks (What's Included) --- */

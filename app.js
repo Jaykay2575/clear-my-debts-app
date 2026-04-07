@@ -817,6 +817,12 @@
 
     // Setup fee still tracked internally for agreement/Stripe but not shown on plan page
 
+    // Populate summary payment amount
+    var summaryPaymentEl = document.getElementById('planSummaryPayment');
+    if (summaryPaymentEl) {
+      summaryPaymentEl.textContent = formatCurrency(tier.amount) + '/mo';
+    }
+
     goToStep('plan');
     track('plan_viewed', { setup_fee: setupFee, monthly_payment: tier.amount, creditor_count: creditors.length });
   }
