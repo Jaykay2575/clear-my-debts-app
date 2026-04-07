@@ -566,7 +566,10 @@
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
 
-    var firstName = firstNameInput.value.trim();
+    var fullName = firstNameInput.value.trim();
+    var nameParts = fullName.split(' ');
+    var firstName = nameParts[0];
+    var lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
     var phone = phoneInput.value.trim();
     var email = emailInput.value.trim();
     var income = parseCurrencyInput(monthlyIncomeInput.value);
@@ -595,10 +598,10 @@
 
     // Build payload
     var payload = {
-      '_subject': 'Financial Snapshot — ' + firstName,
+      '_subject': 'Financial Snapshot — ' + fullName,
       '_template': 'table',
       '_captcha': false,
-      'First Name': firstName,
+      'Full Name': fullName,
       'Phone': phone,
       'Email': email,
       '---': '--- CREDITORS ---',
@@ -660,7 +663,9 @@
     backupToSheets({
       type: 'snapshot',
       timestamp: timestamp,
+      fullName: fullName,
       firstName: firstName,
+      lastName: lastName,
       phone: phone,
       email: email,
       creditors: creditorLines,
@@ -680,6 +685,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           firstname: firstName,
+          lastname: lastName,
           email: email,
           phone: phone,
           consent_given: document.getElementById('consentCheck').checked,
@@ -695,7 +701,7 @@
               mode: 'cors',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                dealname: firstName + ' — $' + totalDebt.toLocaleString('en-AU') + ' Debt Plan',
+                dealname: fullName + ' — $' + totalDebt.toLocaleString('en-AU') + ' Debt Plan',
                 total_debt: String(totalDebt),
                 creditor_details: creditorLines,
                 number_of_creditors: String(creditors.length),
@@ -725,7 +731,8 @@
   var resultsNextBtn = document.getElementById('resultsNextBtn');
 
   function showResults() {
-    var firstName = firstNameInput.value.trim();
+    var fullName = firstNameInput.value.trim();
+    var firstName = fullName.split(' ')[0];
     var income = parseCurrencyInput(monthlyIncomeInput.value);
     var totalDebt = creditors.reduce(function (sum, c) { return sum + c.amount; }, 0);
     var totalBills = 0;
@@ -884,7 +891,9 @@
     try {
       var formBackup = {
         creditors: creditors,
-        firstName: firstNameInput.value.trim(),
+        fullName: firstNameInput.value.trim(),
+        firstName: firstNameInput.value.trim().split(' ')[0],
+        lastName: firstNameInput.value.trim().split(' ').length > 1 ? firstNameInput.value.trim().split(' ').slice(1).join(' ') : '',
         phone: phoneInput.value.trim(),
         email: emailInput.value.trim(),
         income: monthlyIncomeInput.value,
@@ -928,10 +937,11 @@
 
   function showAgreement() {
     var setupFee = getSetupFee(creditors.length);
-    var firstName = firstNameInput.value.trim();
+    var fullName = firstNameInput.value.trim();
+    var firstName = fullName.split(' ')[0];
     var today = new Date().toLocaleDateString('en-AU', { timeZone: 'Australia/Sydney', day: 'numeric', month: 'long', year: 'numeric' });
 
-    document.getElementById('agreeClientName').textContent = firstName;
+    document.getElementById('agreeClientName').textContent = fullName;
     document.getElementById('agreeDate').textContent = today;
     document.getElementById('agreeSetupFee').textContent = formatCurrency(setupFee);
 
@@ -1433,7 +1443,7 @@
           creditors = data.creditors || [];
           renderCreditors();
           monthlyIncomeInput.value = data.income ? data.income.toLocaleString('en-AU') : '';
-          firstNameInput.value = data.firstName || '';
+          firstNameInput.value = data.fullName || data.firstName || '';
           phoneInput.value = data.phone || '';
           emailInput.value = data.email || '';
 
