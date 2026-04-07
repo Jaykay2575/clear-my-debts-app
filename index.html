@@ -435,6 +435,40 @@
               <span class="plan-monthly-card__note">One payment. Every month. That's it.</span>
             </div>
 
+            <!-- Payment Breakdown -->
+            <div class="plan-breakdown">
+              <p class="plan-breakdown__heading">Where your money goes</p>
+              <div class="plan-breakdown__bar">
+                <div class="plan-breakdown__segment plan-breakdown__segment--creditors" id="breakdownBarCreditors"></div>
+                <div class="plan-breakdown__segment plan-breakdown__segment--setup" id="breakdownBarSetup"></div>
+                <div class="plan-breakdown__segment plan-breakdown__segment--fee" id="breakdownBarFee"></div>
+              </div>
+              <div class="plan-breakdown__legend">
+                <div class="plan-breakdown__item">
+                  <span class="plan-breakdown__dot plan-breakdown__dot--creditors"></span>
+                  <div class="plan-breakdown__detail">
+                    <span class="plan-breakdown__label">Paid to your creditors</span>
+                    <span class="plan-breakdown__value" id="breakdownCreditors"></span>
+                  </div>
+                </div>
+                <div class="plan-breakdown__item" id="breakdownSetupRow">
+                  <span class="plan-breakdown__dot plan-breakdown__dot--setup"></span>
+                  <div class="plan-breakdown__detail">
+                    <span class="plan-breakdown__label">Setup fee <span class="plan-breakdown__hint" id="breakdownSetupHint"></span></span>
+                    <span class="plan-breakdown__value" id="breakdownSetupAmount"></span>
+                  </div>
+                </div>
+                <div class="plan-breakdown__item">
+                  <span class="plan-breakdown__dot plan-breakdown__dot--fee"></span>
+                  <div class="plan-breakdown__detail">
+                    <span class="plan-breakdown__label">Plan management (20%)</span>
+                    <span class="plan-breakdown__value" id="breakdownManagement"></span>
+                  </div>
+                </div>
+              </div>
+              <p class="plan-breakdown__note" id="breakdownNote"></p>
+            </div>
+
             <!-- What's Included -->
             <div class="plan-includes">
               <p class="plan-includes__heading">What's included</p>

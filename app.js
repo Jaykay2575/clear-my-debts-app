@@ -818,6 +818,42 @@
     // Establishment fee (subdued, at bottom)
     document.getElementById('planSetupFee').textContent = formatCurrency(setupFee);
 
+    // --- Payment Breakdown ---
+    var monthlyPayment = tier.amount;
+    var managementFee = Math.round(monthlyPayment * 0.20); // 20% ongoing fee
+    var setupMonths = Math.ceil(setupFee / (monthlyPayment * 0.5)); // approx months to pay off setup
+    var setupPortionMonthly = Math.round(setupFee / setupMonths);
+    var creditorPortion = monthlyPayment - managementFee - setupPortionMonthly;
+    // Ensure nothing goes negative
+    if (creditorPortion < 0) {
+      setupPortionMonthly = monthlyPayment - managementFee;
+      creditorPortion = 0;
+      setupMonths = Math.ceil(setupFee / setupPortionMonthly);
+    }
+
+    // After setup is paid off
+    var creditorAfterSetup = monthlyPayment - managementFee;
+
+    // Populate breakdown values
+    document.getElementById('breakdownCreditors').textContent = formatCurrency(creditorPortion) + '/mo';
+    document.getElementById('breakdownSetupAmount').textContent = formatCurrency(setupPortionMonthly) + '/mo';
+    document.getElementById('breakdownSetupHint').textContent = '(~' + setupMonths + ' months)';
+    document.getElementById('breakdownManagement').textContent = formatCurrency(managementFee) + '/mo';
+
+    // Breakdown bar widths
+    var credPct = Math.round((creditorPortion / monthlyPayment) * 100);
+    var setupPct = Math.round((setupPortionMonthly / monthlyPayment) * 100);
+    var feePct = 100 - credPct - setupPct;
+    document.getElementById('breakdownBarCreditors').style.width = credPct + '%';
+    document.getElementById('breakdownBarSetup').style.width = setupPct + '%';
+    document.getElementById('breakdownBarFee').style.width = feePct + '%';
+
+    // Note
+    document.getElementById('breakdownNote').textContent =
+      'Once the setup fee is paid off (~' + setupMonths + ' months), ' +
+      formatCurrency(creditorAfterSetup) + '/mo goes directly to your creditors — that\u2019s ' +
+      Math.round((creditorAfterSetup / monthlyPayment) * 100) + '% of your payment.';
+
     goToStep('plan');
     track('plan_viewed', { setup_fee: setupFee, monthly_payment: tier.amount, creditor_count: creditors.length });
   }

@@ -1306,6 +1306,117 @@ body {
   margin-top: 6px;
 }
 
+/* --- Payment Breakdown --- */
+.plan-breakdown {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.plan-breakdown__heading {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-bottom: 14px;
+}
+
+.plan-breakdown__bar {
+  display: flex;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  gap: 2px;
+}
+
+.plan-breakdown__segment {
+  border-radius: 4px;
+  transition: width 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.plan-breakdown__segment--creditors {
+  background: var(--color-primary);
+}
+
+.plan-breakdown__segment--setup {
+  background: #f59e0b;
+}
+
+.plan-breakdown__segment--fee {
+  background: #8b5cf6;
+}
+
+.plan-breakdown__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.plan-breakdown__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.plan-breakdown__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.plan-breakdown__dot--creditors {
+  background: var(--color-primary);
+}
+
+.plan-breakdown__dot--setup {
+  background: #f59e0b;
+}
+
+.plan-breakdown__dot--fee {
+  background: #8b5cf6;
+}
+
+.plan-breakdown__detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex: 1;
+  min-width: 0;
+}
+
+.plan-breakdown__label {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.plan-breakdown__hint {
+  font-size: 12px;
+  color: var(--color-text-faint);
+}
+
+.plan-breakdown__value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.plan-breakdown__note {
+  font-size: 12px;
+  color: var(--color-text-faint);
+  margin-top: 14px;
+  line-height: 1.5;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
 /* --- Plan Perks (What's Included) --- */
 .plan-includes {
   margin-bottom: 20px;
