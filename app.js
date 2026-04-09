@@ -820,20 +820,26 @@
     }
 
     // Context: estimated current repayments vs plan
-    // Rough estimate: credit card/personal loan minimums are typically 2–3% of balance
-    var estimatedCurrentMin = Math.round(totalDebt * 0.025 / 5) * 5; // 2.5%, rounded to nearest $5
+    // Only show this comparison if the estimate is meaningfully higher than the plan
+    // (i.e. the plan saves them money — avoids backfiring for small debt amounts)
+    var estimatedCurrentMin = Math.round(totalDebt * 0.025 / 5) * 5; // 2.5% of balance, rounded to $5
+    var planContextEl = document.getElementById('planContext');
     var contextNoteEl = document.getElementById('planContextNote');
     var planContextAmountEl = document.getElementById('planContextAmount');
     var planCurrentRepaymentsEl = document.getElementById('planCurrentRepayments');
-    if (planCurrentRepaymentsEl) planCurrentRepaymentsEl.textContent = '~' + formatCurrency(estimatedCurrentMin) + '/mo';
-    if (planContextAmountEl) planContextAmountEl.textContent = formatCurrency(tier.amount) + '/mo';
-    if (contextNoteEl) {
-      if (tier.amount < estimatedCurrentMin) {
+
+    if (estimatedCurrentMin > tier.amount + 20) {
+      // Comparison is favourable — show it
+      if (planContextEl) planContextEl.style.display = '';
+      if (planCurrentRepaymentsEl) planCurrentRepaymentsEl.textContent = '~' + formatCurrency(estimatedCurrentMin) + '/mo';
+      if (planContextAmountEl) planContextAmountEl.textContent = formatCurrency(tier.amount) + '/mo';
+      if (contextNoteEl) {
         var saving = estimatedCurrentMin - tier.amount;
-        contextNoteEl.textContent = 'You could save approximately ' + formatCurrency(saving) + '/mo — and actually get ahead.';
-      } else {
-        contextNoteEl.textContent = 'One predictable payment instead of juggling multiple creditors — and interest frozen.';
+        contextNoteEl.textContent = 'Approximately ' + formatCurrency(saving) + '/mo more in your pocket — and your debt actually reduces.';
       }
+    } else {
+      // Comparison would backfire — hide it entirely
+      if (planContextEl) planContextEl.style.display = 'none';
     }
 
     // Debt-free timeline estimate
