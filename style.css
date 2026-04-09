@@ -2527,6 +2527,6 @@ input[type="date"].input {
 /* Bills section monthly note */
 .bills-section__note {
   font-size: 0.78rem;
-  color: var(--text-muted, #9ca3af);
-  font-weight: 400;
+  color: #38bdf8;
+  font-weight: 500;
 }
