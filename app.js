@@ -812,6 +812,44 @@
     // Monthly payment hero
     document.getElementById('planMonthlyAmount').textContent = formatCurrency(tier.amount) + '/mo';
 
+    // Daily cost
+    var dailyEl = document.getElementById('planDailyCost');
+    if (dailyEl) {
+      var daily = (tier.amount / 30).toFixed(2);
+      dailyEl.textContent = 'That’s just $' + daily + ' per day';
+    }
+
+    // Context: estimated current repayments vs plan
+    // Rough estimate: credit card/personal loan minimums are typically 2–3% of balance
+    var estimatedCurrentMin = Math.round(totalDebt * 0.025 / 5) * 5; // 2.5%, rounded to nearest $5
+    var contextNoteEl = document.getElementById('planContextNote');
+    var planContextAmountEl = document.getElementById('planContextAmount');
+    var planCurrentRepaymentsEl = document.getElementById('planCurrentRepayments');
+    if (planCurrentRepaymentsEl) planCurrentRepaymentsEl.textContent = '~' + formatCurrency(estimatedCurrentMin) + '/mo';
+    if (planContextAmountEl) planContextAmountEl.textContent = formatCurrency(tier.amount) + '/mo';
+    if (contextNoteEl) {
+      if (tier.amount < estimatedCurrentMin) {
+        var saving = estimatedCurrentMin - tier.amount;
+        contextNoteEl.textContent = 'You could save approximately ' + formatCurrency(saving) + '/mo — and actually get ahead.';
+      } else {
+        contextNoteEl.textContent = 'One predictable payment instead of juggling multiple creditors — and interest frozen.';
+      }
+    }
+
+    // Debt-free timeline estimate
+    // Assume ~80% of plan payment goes to creditors after fees
+    var timelineEl = document.getElementById('planTimeline');
+    if (timelineEl && totalDebt > 0 && tier.amount > 0) {
+      var monthsToFree = Math.ceil(totalDebt / (tier.amount * 0.8));
+      var years = Math.floor(monthsToFree / 12);
+      var months = monthsToFree % 12;
+      var timelineStr = '';
+      if (years > 0) timelineStr += years + (years === 1 ? ' year' : ' years');
+      if (years > 0 && months > 0) timelineStr += ' and ';
+      if (months > 0) timelineStr += months + (months === 1 ? ' month' : ' months');
+      timelineEl.textContent = timelineStr || 'under a year';
+    }
+
     // CTA button amount
     var ctaAmountEl = document.getElementById('planCtaAmount');
     if (ctaAmountEl) ctaAmountEl.textContent = formatCurrency(tier.amount);
@@ -838,6 +876,13 @@
   planNextBtn.addEventListener('click', function () {
     showPayment();
   });
+
+  var planNextBtnTop = document.getElementById('planNextBtnTop');
+  if (planNextBtnTop) {
+    planNextBtnTop.addEventListener('click', function () {
+      showPayment();
+    });
+  }
 
   // =============================================
   //  STEP 6: PAYMENT

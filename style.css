@@ -2427,3 +2427,92 @@ input[type="date"].input {
   background: rgba(255,255,255,0.06);
   border-color: rgba(255,255,255,0.3);
 }
+
+/* ============================================
+   PLAN PAGE — CONTEXT & CONVERSION ELEMENTS
+   ============================================ */
+
+/* Daily cost line */
+.plan-monthly-card__daily {
+  font-size: 0.85rem;
+  color: #0d9488;
+  font-weight: 600;
+  margin-top: 0.1rem;
+  letter-spacing: 0.01em;
+}
+
+/* Before/after comparison */
+.plan-context {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.plan-context__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.plan-context__row--before .plan-context__value {
+  color: var(--text-muted, #9ca3af);
+  text-decoration: line-through;
+  font-size: 0.95rem;
+}
+.plan-context__label {
+  font-size: 0.82rem;
+  color: var(--text-muted, #9ca3af);
+}
+.plan-context__value {
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+.plan-context__value--highlight {
+  color: #0d9488;
+  font-size: 1.1rem;
+}
+.plan-context__arrow {
+  text-align: center;
+  padding: 0.3rem 0;
+}
+.plan-context__note {
+  font-size: 0.78rem;
+  color: #0d9488;
+  margin: 0.5rem 0 0;
+  text-align: center;
+}
+
+/* Debt-free timeline */
+.plan-timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: rgba(13, 148, 136, 0.08);
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+.plan-timeline svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.plan-timeline p {
+  font-size: 0.87rem;
+  color: var(--text, #f1f5f9);
+  margin: 0;
+  line-height: 1.5;
+}
+.plan-timeline strong {
+  color: #0d9488;
+}
+
+/* Early CTA button (above the fold on mobile) */
+.btn--plan-early {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}

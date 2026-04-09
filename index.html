@@ -432,8 +432,36 @@
             <div class="plan-monthly-card">
               <span class="plan-monthly-card__label">Your monthly repayment</span>
               <span class="plan-monthly-card__value" id="planMonthlyAmount"></span>
+              <span class="plan-monthly-card__daily" id="planDailyCost"></span>
               <span class="plan-monthly-card__note">One payment. Every month. That's it.</span>
             </div>
+
+            <!-- Context: current vs plan -->
+            <div class="plan-context" id="planContext">
+              <div class="plan-context__row plan-context__row--before">
+                <span class="plan-context__label">What you're probably paying now</span>
+                <span class="plan-context__value" id="planCurrentRepayments"></span>
+              </div>
+              <div class="plan-context__arrow">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+              </div>
+              <div class="plan-context__row plan-context__row--after">
+                <span class="plan-context__label">Your Clear My Debts plan</span>
+                <span class="plan-context__value plan-context__value--highlight" id="planContextAmount"></span>
+              </div>
+              <p class="plan-context__note" id="planContextNote"></p>
+            </div>
+
+            <!-- Debt-free timeline -->
+            <div class="plan-timeline">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <p>Based on your debt, you could be <strong>debt-free in <span id="planTimeline"></span></strong> — with interest frozen.</p>
+            </div>
+
+            <!-- Early CTA for mobile -->
+            <button type="button" class="btn btn--primary btn--glow btn--plan-early" id="planNextBtnTop">
+              Yes, I want this plan &rarr;
+            </button>
 
             <!-- What's in your payment -->
             <div class="plan-covers">
