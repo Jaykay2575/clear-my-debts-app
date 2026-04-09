@@ -2530,3 +2530,67 @@ input[type="date"].input {
   color: #38bdf8;
   font-weight: 500;
 }
+
+/* ============================================
+   PAYMENT STEP — SCHEDULE OPTION CARD
+   ============================================ */
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+  color: var(--text-muted, #9ca3af);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.or-divider::before,
+.or-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+}
+
+.schedule-option {
+  background: rgba(56, 189, 248, 0.06);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 14px;
+  padding: 1rem 1.125rem 1.125rem;
+  margin-bottom: 1.25rem;
+}
+.schedule-option__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.schedule-option__header strong {
+  font-size: 0.95rem;
+  color: #e0f2fe;
+}
+.schedule-option__body {
+  font-size: 0.83rem;
+  color: var(--text-muted, #9ca3af);
+  margin: 0 0 0.9rem;
+  line-height: 1.55;
+}
+.btn--schedule-option {
+  width: 100%;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.7rem 1rem;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'General Sans', sans-serif;
+  text-align: center;
+}
+.btn--schedule-option:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.55);
+}
