@@ -2226,3 +2226,204 @@ input[type="date"].input {
   border-color: #25d366;
   color: #25d366;
 }
+
+/* ============================================
+   SCHEDULE DIRECT DEBIT STEP
+   ============================================ */
+
+/* Icon */
+.schedule-icon {
+  width: 72px;
+  height: 72px;
+  background: rgba(13, 148, 136, 0.12);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  color: #0d9488;
+}
+
+/* Amount card (mirrors payment step) */
+.schedule-amount-card {
+  background: rgba(13, 148, 136, 0.1);
+  border: 1px solid rgba(13, 148, 136, 0.25);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+.schedule-amount-card__label {
+  font-size: 0.8rem;
+  color: var(--text-muted, #9ca3af);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.schedule-amount-card__value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0d9488;
+  font-family: 'Cabinet Grotesk', sans-serif;
+}
+
+/* Date picker */
+.schedule-date-wrap {
+  margin-bottom: 1.25rem;
+}
+.schedule-date-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text, #f1f5f9);
+  margin-bottom: 0.5rem;
+}
+.schedule-date-input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--text, #f1f5f9);
+  font-family: 'General Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.schedule-date-input:focus {
+  border-color: #0d9488;
+}
+.schedule-date-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted, #9ca3af);
+  margin-top: 0.4rem;
+}
+
+/* Quick-pick buttons */
+.schedule-quickpick {
+  margin-bottom: 1.25rem;
+}
+.schedule-quickpick__label {
+  font-size: 0.8rem;
+  color: var(--text-muted, #9ca3af);
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.schedule-quickpick__btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.schedule-qbtn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text, #f1f5f9);
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'General Sans', sans-serif;
+  text-align: center;
+}
+.schedule-qbtn:hover {
+  background: rgba(13, 148, 136, 0.15);
+  border-color: rgba(13, 148, 136, 0.4);
+  color: #0d9488;
+}
+.schedule-qbtn.active {
+  background: rgba(13, 148, 136, 0.2);
+  border-color: #0d9488;
+  color: #0d9488;
+  font-weight: 600;
+}
+
+/* Confirm banner */
+.schedule-confirm {
+  margin-bottom: 1.25rem;
+}
+.schedule-confirm__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(13, 148, 136, 0.1);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+.schedule-confirm__text {
+  font-size: 0.9rem;
+  color: var(--text, #f1f5f9);
+  margin: 0 0 0.15rem;
+}
+.schedule-confirm__sub {
+  font-size: 0.78rem;
+  color: var(--text-muted, #9ca3af);
+  margin: 0;
+}
+
+/* Error */
+.schedule-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: #f87171;
+  margin-bottom: 1rem;
+}
+
+/* Back button */
+.schedule-back-btn {
+  display: block;
+  margin: 0.75rem auto 0;
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #9ca3af);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-family: 'General Sans', sans-serif;
+}
+.schedule-back-btn:hover {
+  color: var(--text, #f1f5f9);
+}
+
+/* "Don't have the money?" prompt on payment step */
+.schedule-later {
+  text-align: center;
+  margin: 1rem 0 0.25rem;
+  padding: 1rem 0 0;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+.schedule-later__label {
+  font-size: 0.82rem;
+  color: var(--text-muted, #9ca3af);
+  margin-bottom: 0.6rem;
+}
+.btn--schedule {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: var(--text, #f1f5f9);
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'General Sans', sans-serif;
+}
+.btn--schedule:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.3);
+}

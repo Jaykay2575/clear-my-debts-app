@@ -599,6 +599,15 @@
               </div>
             </div>
 
+            <!-- Schedule for later -->
+            <div class="schedule-later">
+              <p class="schedule-later__label">Don't have the money right now?</p>
+              <button type="button" id="scheduleBtn" class="btn btn--ghost btn--schedule">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Schedule my first payment for a future date
+              </button>
+            </div>
+
             <!-- Or talk to someone -->
             <div class="payment-alt">
               <p>Prefer to chat first?</p>
@@ -611,6 +620,71 @@
           </div>
         </div>
 
+        <!-- Step 7: Schedule Direct Debit -->
+        <div class="step" data-step="schedule">
+          <div class="step__content">
+            <div class="schedule-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <h2 class="step__title">Pick your<br>start date</h2>
+            <p class="step__subtitle">Your bank details are locked in now — nothing is charged until the date you choose.</p>
+
+            <!-- Monthly amount reminder -->
+            <div class="schedule-amount-card">
+              <span class="schedule-amount-card__label">Your monthly payment</span>
+              <span class="schedule-amount-card__value" id="schedMonthlyAmount"></span>
+            </div>
+
+            <!-- Date picker -->
+            <div class="schedule-date-wrap">
+              <label class="schedule-date-label" for="schedStartDate">When would you like your first debit?</label>
+              <input type="date" id="schedStartDate" class="schedule-date-input" />
+              <p class="schedule-date-hint">You can pick any date from 3 days to 60 days from today.</p>
+            </div>
+
+            <!-- Quick-pick buttons -->
+            <div class="schedule-quickpick">
+              <p class="schedule-quickpick__label">Quick options</p>
+              <div class="schedule-quickpick__btns">
+                <button type="button" class="schedule-qbtn" data-days="7">In 1 week</button>
+                <button type="button" class="schedule-qbtn" data-days="14">In 2 weeks</button>
+                <button type="button" class="schedule-qbtn" data-special="next-month-1">1st of next month</button>
+                <button type="button" class="schedule-qbtn" data-special="next-month-15">15th of next month</button>
+              </div>
+            </div>
+
+            <!-- Selected date summary -->
+            <div class="schedule-confirm" id="schedConfirm" style="display:none;">
+              <div class="schedule-confirm__inner">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <div>
+                  <p class="schedule-confirm__text">First debit on <strong id="schedDateDisplay"></strong></p>
+                  <p class="schedule-confirm__sub">Then every month on the same day</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Error message -->
+            <div class="schedule-error" id="schedError" style="display:none;"></div>
+
+            <!-- CTA -->
+            <button type="button" id="schedSubmitBtn" class="btn btn--primary btn--glow btn--large" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span id="schedSubmitLabel">Set up my direct debit</span>
+            </button>
+
+            <p class="payment-secure">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Bank details secured via Stripe. Nothing charged today.
+            </p>
+
+            <button type="button" id="schedBackBtn" class="btn btn--text schedule-back-btn">
+              &larr; Go back
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 8: Service Agreement -->
         <!-- Step 7: Service Agreement -->
         <div class="step" data-step="agreement">
           <div class="step__content">

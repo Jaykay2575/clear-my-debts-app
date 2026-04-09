@@ -1433,6 +1433,201 @@
     });
   }
 
+  // =============================================
+  //  SCHEDULE DIRECT DEBIT FLOW
+  // =============================================
+  var SCHEDULE_API = 'https://cmd-schedule-api.vercel.app/api/create-checkout';
+
+  var scheduleBtn    = document.getElementById('scheduleBtn');
+  var schedBackBtn   = document.getElementById('schedBackBtn');
+  var schedStartDate = document.getElementById('schedStartDate');
+  var schedConfirm   = document.getElementById('schedConfirm');
+  var schedDateDisp  = document.getElementById('schedDateDisplay');
+  var schedSubmitBtn = document.getElementById('schedSubmitBtn');
+  var schedSubmitLbl = document.getElementById('schedSubmitLabel');
+  var schedError     = document.getElementById('schedError');
+  var schedAmount    = document.getElementById('schedMonthlyAmount');
+  var schedQBtns     = document.querySelectorAll('.schedule-qbtn');
+
+  // Helper: format a Date as YYYY-MM-DD
+  function toISODate(d) {
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var dd = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + dd;
+  }
+
+  // Helper: format a date string nicely for display
+  function formatDisplayDate(isoStr) {
+    var parts = isoStr.split('-');
+    var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    return d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  // Set up the date picker constraints: min 3 days, max 60 days
+  function initDatePicker() {
+    var today = new Date();
+    var minDate = new Date(today); minDate.setDate(today.getDate() + 3);
+    var maxDate = new Date(today); maxDate.setDate(today.getDate() + 60);
+    if (schedStartDate) {
+      schedStartDate.min = toISODate(minDate);
+      schedStartDate.max = toISODate(maxDate);
+      schedStartDate.value = '';
+    }
+  }
+
+  // Update confirm banner when a date is picked
+  function onDateSelected(isoVal) {
+    if (!isoVal) {
+      schedConfirm.style.display = 'none';
+      schedSubmitBtn.disabled = true;
+      return;
+    }
+    schedDateDisp.textContent = formatDisplayDate(isoVal);
+    schedConfirm.style.display = 'block';
+    schedSubmitBtn.disabled = false;
+    // Highlight the matching quick-pick
+    schedQBtns.forEach(function (b) { b.classList.remove('active'); });
+  }
+
+  // Open schedule step
+  if (scheduleBtn) {
+    scheduleBtn.addEventListener('click', function () {
+      // Populate the amount from the current tier
+      if (schedAmount) {
+        var amtEl = document.getElementById('payMonthlyAmount');
+        schedAmount.textContent = amtEl ? amtEl.textContent : '';
+      }
+      initDatePicker();
+      if (schedConfirm) schedConfirm.style.display = 'none';
+      if (schedSubmitBtn) schedSubmitBtn.disabled = true;
+      if (schedError) schedError.style.display = 'none';
+      goToStep('schedule');
+      track('schedule_step_viewed', {});
+    });
+  }
+
+  // Back button on schedule step
+  if (schedBackBtn) {
+    schedBackBtn.addEventListener('click', function () {
+      goToStep('payment');
+    });
+  }
+
+  // Date input change
+  if (schedStartDate) {
+    schedStartDate.addEventListener('change', function () {
+      onDateSelected(this.value);
+    });
+  }
+
+  // Quick-pick buttons
+  schedQBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var today = new Date();
+      var target;
+      var days = btn.getAttribute('data-days');
+      var special = btn.getAttribute('data-special');
+      if (days) {
+        target = new Date(today);
+        target.setDate(today.getDate() + parseInt(days));
+      } else if (special === 'next-month-1') {
+        target = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+      } else if (special === 'next-month-15') {
+        target = new Date(today.getFullYear(), today.getMonth() + 1, 15);
+        // If next month's 15th is less than 3 days away, go to month after
+        var minD = new Date(today); minD.setDate(today.getDate() + 3);
+        if (target < minD) target = new Date(today.getFullYear(), today.getMonth() + 2, 15);
+      }
+      if (target) {
+        var iso = toISODate(target);
+        schedStartDate.value = iso;
+        onDateSelected(iso);
+        // Mark active
+        schedQBtns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+      }
+    });
+  });
+
+  // Submit: call Vercel API and redirect to Stripe Checkout
+  if (schedSubmitBtn) {
+    schedSubmitBtn.addEventListener('click', function () {
+      var isoDate = schedStartDate ? schedStartDate.value : '';
+      if (!isoDate) return;
+
+      var tier = getCurrentTier();
+      if (!tier) return;
+
+      // Save form data to localStorage (same as pay-now flow, for post-Stripe agreement)
+      var formData = {
+        creditors: creditors,
+        income: parseCurrencyInput(monthlyIncomeInput.value),
+        totalBills: 0,
+        fullName: firstNameInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        email: emailInput.value.trim(),
+        bills: {}
+      };
+      billInputs.forEach(function (input) {
+        formData.totalBills += parseCurrencyInput(input.value);
+        formData.bills[input.id] = parseCurrencyInput(input.value);
+      });
+      try {
+        localStorage.setItem('cmd_form_data', JSON.stringify(formData));
+        localStorage.setItem('cmd_return_to_sign', 'true');
+      } catch (e) {}
+
+      // Show loading state
+      schedSubmitBtn.disabled = true;
+      schedSubmitLbl.textContent = 'Setting up…';
+      if (schedError) schedError.style.display = 'none';
+
+      // Call our Vercel API
+      fetch(SCHEDULE_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: tier.amount,
+          email: formData.email,
+          name: formData.fullName,
+          phone: formData.phone,
+          startDate: isoDate
+        })
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.url) {
+          track('schedule_checkout_redirect', { amount: tier.amount, start_date: isoDate });
+          window.location.href = data.url;
+        } else {
+          throw new Error(data.error || 'Could not create checkout session');
+        }
+      })
+      .catch(function (err) {
+        schedSubmitBtn.disabled = false;
+        schedSubmitLbl.textContent = 'Set up my direct debit';
+        if (schedError) {
+          schedError.textContent = 'Something went wrong: ' + err.message + '. Please call 1300 998 168.';
+          schedError.style.display = 'block';
+        }
+        track('schedule_checkout_error', { error: err.message });
+      });
+    });
+  }
+
+  // Helper to get the current pricing tier
+  function getCurrentTier() {
+    var income = parseCurrencyInput(monthlyIncomeInput ? monthlyIncomeInput.value : '0');
+    var totalBills = 0;
+    billInputs.forEach(function (input) { totalBills += parseCurrencyInput(input.value); });
+    var surplus = Math.max(0, income - totalBills);
+    for (var i = 0; i < PAYMENT_TIERS.length; i++) {
+      if (surplus <= PAYMENT_TIERS[i].maxSurplus) return PAYMENT_TIERS[i];
+    }
+    return PAYMENT_TIERS[PAYMENT_TIERS.length - 1];
+  }
+
   // Check if returning from Stripe
   function checkStripeReturn() {
     try {
