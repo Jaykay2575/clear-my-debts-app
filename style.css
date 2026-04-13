@@ -2594,3 +2594,170 @@ input[type="date"].input {
   background: rgba(56, 189, 248, 0.2);
   border-color: rgba(56, 189, 248, 0.55);
 }
+
+/* ============================================
+   PAYMENT STEP — CALLBACK OPTION CARD
+   ============================================ */
+
+.callback-option {
+  background: rgba(167, 139, 250, 0.06);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  border-radius: 14px;
+  padding: 1rem 1.125rem 1.125rem;
+  margin-bottom: 1rem;
+}
+.callback-option__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.callback-option__header strong {
+  font-size: 0.95rem;
+  color: #ede9fe;
+}
+.callback-option__body {
+  font-size: 0.83rem;
+  color: var(--text-muted, #9ca3af);
+  margin: 0 0 0.9rem;
+  line-height: 1.55;
+}
+
+/* Toggle button */
+.btn--callback-toggle {
+  width: 100%;
+  background: rgba(167, 139, 250, 0.12);
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  color: #a78bfa;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.7rem 1rem;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'General Sans', sans-serif;
+  text-align: center;
+}
+.btn--callback-toggle:hover {
+  background: rgba(167, 139, 250, 0.2);
+  border-color: rgba(167, 139, 250, 0.55);
+}
+
+/* Inline form */
+.callback-form {
+  margin-top: 0.75rem;
+}
+.callback-form__field {
+  margin-bottom: 0.65rem;
+}
+.callback-form__label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted, #9ca3af);
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.callback-form__input,
+.callback-form__select {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text, #f1f5f9);
+  font-family: 'General Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+}
+.callback-form__input:focus,
+.callback-form__select:focus {
+  border-color: #a78bfa;
+}
+.callback-form__input[readonly] {
+  opacity: 0.65;
+  cursor: default;
+}
+.callback-form__select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2rem;
+}
+
+/* Submit button */
+.btn--callback-submit {
+  width: 100%;
+  margin-top: 0.5rem;
+  background: #a78bfa;
+  border: none;
+  color: #1e1b4b;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'General Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.btn--callback-submit:hover {
+  background: #c4b5fd;
+}
+.btn--callback-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Success state */
+.callback-success {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  margin-top: 0.5rem;
+}
+.callback-success__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #c4b5fd;
+  margin: 0 0 0.15rem;
+}
+.callback-success__sub {
+  font-size: 0.78rem;
+  color: var(--text-muted, #9ca3af);
+  margin: 0;
+}
+
+/* Direct call fallback text */
+.payment-call-direct {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted, #9ca3af);
+  margin: 0.75rem 0 0;
+}
+.payment-call-direct a {
+  color: var(--text, #f1f5f9);
+  font-weight: 600;
+  text-decoration: none;
+}
+.payment-call-direct a:hover {
+  text-decoration: underline;
+}
+.payment-call-direct span {
+  display: block;
+  font-size: 0.72rem;
+  margin-top: 0.2rem;
+}

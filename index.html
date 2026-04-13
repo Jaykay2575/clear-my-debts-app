@@ -643,15 +643,63 @@
               </button>
             </div>
 
-            <!-- Or talk to someone -->
-            <div class="payment-alt">
-              <p>Prefer to chat first?</p>
-              <a href="tel:1300998168" class="payment-alt__call">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                <span>1300 998 168</span>
-              </a>
-              <p class="payment-alt__hours">Mon–Fri, 8am – 6pm AEST</p>
+            <!-- Request a callback -->
+            <div class="or-divider">
+              <span>or</span>
             </div>
+
+            <div class="callback-option">
+              <div class="callback-option__header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <strong>Want to speak to someone first?</strong>
+              </div>
+              <p class="callback-option__body">We'll call you to walk through your plan &mdash; no obligation, no pressure.</p>
+
+              <!-- Toggle button -->
+              <button type="button" id="callbackToggleBtn" class="btn btn--callback-toggle">
+                Request a callback &rarr;
+              </button>
+
+              <!-- Inline callback form (hidden initially) -->
+              <div class="callback-form" id="callbackForm" style="display:none;">
+                <div class="callback-form__field">
+                  <label for="cbName" class="callback-form__label">Name</label>
+                  <input type="text" id="cbName" class="callback-form__input" readonly />
+                </div>
+                <div class="callback-form__field">
+                  <label for="cbPhone" class="callback-form__label">Phone</label>
+                  <input type="tel" id="cbPhone" class="callback-form__input" />
+                </div>
+                <div class="callback-form__field">
+                  <label for="cbTime" class="callback-form__label">Best time to call</label>
+                  <select id="cbTime" class="callback-form__select">
+                    <option value="Now">Now</option>
+                    <option value="This morning">This morning</option>
+                    <option value="This afternoon">This afternoon</option>
+                    <option value="Tomorrow morning">Tomorrow morning</option>
+                    <option value="Tomorrow afternoon">Tomorrow afternoon</option>
+                  </select>
+                </div>
+                <button type="button" id="callbackSubmitBtn" class="btn btn--callback-submit">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <span id="callbackSubmitLabel">Request my callback</span>
+                </button>
+              </div>
+
+              <!-- Success state -->
+              <div class="callback-success" id="callbackSuccess" style="display:none;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <div>
+                  <p class="callback-success__title">We'll call you shortly</p>
+                  <p class="callback-success__sub">Your case manager Joe has your details and will be in touch.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Direct call fallback -->
+            <p class="payment-call-direct">
+              Or call us now: <a href="tel:1300998168">1300 998 168</a> <span>Mon–Fri, 8am–6pm AEST</span>
+            </p>
           </div>
         </div>
 

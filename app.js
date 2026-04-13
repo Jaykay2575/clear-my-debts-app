@@ -1485,6 +1485,90 @@
   }
 
   // =============================================
+  //  REQUEST A CALLBACK FLOW
+  // =============================================
+  var callbackToggleBtn = document.getElementById('callbackToggleBtn');
+  var callbackForm      = document.getElementById('callbackForm');
+  var callbackSuccess   = document.getElementById('callbackSuccess');
+  var callbackSubmitBtn = document.getElementById('callbackSubmitBtn');
+  var callbackSubmitLbl = document.getElementById('callbackSubmitLabel');
+  var cbNameInput       = document.getElementById('cbName');
+  var cbPhoneInput      = document.getElementById('cbPhone');
+  var cbTimeSelect      = document.getElementById('cbTime');
+
+  // Toggle: show the inline form and pre-fill fields
+  if (callbackToggleBtn) {
+    callbackToggleBtn.addEventListener('click', function () {
+      callbackToggleBtn.style.display = 'none';
+      if (callbackForm) callbackForm.style.display = 'block';
+      // Pre-fill from earlier steps
+      if (cbNameInput && firstNameInput) cbNameInput.value = firstNameInput.value.trim();
+      if (cbPhoneInput && phoneInput) {
+        cbPhoneInput.value = phoneInput.value.trim();
+        // If phone is empty, focus it so they can enter
+        if (!cbPhoneInput.value) cbPhoneInput.focus();
+      }
+      track('callback_form_opened', {});
+    });
+  }
+
+  // Submit callback request via Web3Forms
+  if (callbackSubmitBtn) {
+    callbackSubmitBtn.addEventListener('click', function () {
+      var cbPhone = cbPhoneInput ? cbPhoneInput.value.trim() : '';
+      if (!cbPhone) {
+        cbPhoneInput.focus();
+        return;
+      }
+
+      callbackSubmitBtn.disabled = true;
+      callbackSubmitLbl.textContent = 'Sending…';
+
+      // Gather debt snapshot for the email
+      var tier = getCurrentTier();
+      var totalDebt = 0;
+      var creditorList = creditors.map(function (c) { return c.name + ': ' + formatCurrency(c.amount); });
+      creditors.forEach(function (c) { totalDebt += c.amount; });
+
+      var payload = {
+        access_key: 'f8acfff0-024e-49b5-bd6c-9c66ac7ed627',
+        subject: '📞 Callback Requested — ' + (cbNameInput ? cbNameInput.value : 'Customer'),
+        from_name: 'Clear My Debts App',
+        name: cbNameInput ? cbNameInput.value : '',
+        phone: cbPhone,
+        best_time_to_call: cbTimeSelect ? cbTimeSelect.value : 'Now',
+        email: emailInput ? emailInput.value.trim() : '',
+        total_debt: formatCurrency(totalDebt),
+        creditors: creditorList.join(' | '),
+        monthly_plan: tier ? formatCurrency(tier.amount) + '/mo' : 'N/A',
+        monthly_income: monthlyIncomeInput ? formatCurrency(parseCurrencyInput(monthlyIncomeInput.value)) : '',
+        type: 'Callback Request'
+      };
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.success) {
+          if (callbackForm) callbackForm.style.display = 'none';
+          if (callbackSuccess) callbackSuccess.style.display = 'flex';
+          track('callback_requested', { time: payload.best_time_to_call });
+        } else {
+          throw new Error('Submission failed');
+        }
+      })
+      .catch(function () {
+        callbackSubmitBtn.disabled = false;
+        callbackSubmitLbl.textContent = 'Request my callback';
+        alert('Something went wrong. Please call us directly on 1300 998 168.');
+      });
+    });
+  }
+
+  // =============================================
   //  SCHEDULE DIRECT DEBIT FLOW
   // =============================================
   var SCHEDULE_API = 'https://cmd-schedule-api.vercel.app/api/create-checkout';
