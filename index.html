@@ -73,6 +73,10 @@
     <!-- Form Container -->
     <main class="main">
       <form id="snapshotForm" class="form" novalidate>
+        <!-- Honeypot field — hidden from humans, catches bots -->
+        <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
+          <input type="text" name="website_url" id="hp_field" tabindex="-1" autocomplete="off">
+        </div>
 
         <!-- Step 0: Question-First Intro -->
         <div class="step active" data-step="intro">

@@ -563,6 +563,10 @@
     e.preventDefault();
     if (submitBtn.disabled) return;
 
+    // Honeypot bot detection — if this hidden field has a value, it's a bot
+    var hpField = document.getElementById('hp_field');
+    if (hpField && hpField.value) { submitBtn.classList.remove('loading'); return; }
+
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
 
