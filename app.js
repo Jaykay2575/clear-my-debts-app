@@ -682,7 +682,7 @@
       fetch('https://cmd-companion.vercel.app/api/create-contact', {
         method: 'POST',
         mode: 'cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-API-Key': '89fa2b1d87e124c78403040bf8865243' },
         body: JSON.stringify({
           firstname: firstName,
           lastname: lastName,
@@ -699,7 +699,7 @@
             fetch('https://cmd-companion.vercel.app/api/create-deal', {
               method: 'POST',
               mode: 'cors',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json', 'X-API-Key': '89fa2b1d87e124c78403040bf8865243' },
               body: JSON.stringify({
                 dealname: fullName + ' — $' + totalDebt.toLocaleString('en-AU') + ' Debt Plan',
                 total_debt: String(totalDebt),
