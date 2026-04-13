@@ -679,7 +679,7 @@
 
     // Create contact + deal in HubSpot via CMD Companion API
     try {
-      fetch('https://cmd-companion.vercel.app/api/create-contact', {
+      fetch('https://cmd-api-gateway.vercel.app/api/create-contact', {
         method: 'POST',
         mode: 'cors',
         headers: { 'Content-Type': 'application/json', 'X-API-Key': '89fa2b1d87e124c78403040bf8865243' },
@@ -696,7 +696,7 @@
         .then(function (contactResult) {
           if (contactResult.success && contactResult.contact) {
             // Create deal linked to the contact
-            fetch('https://cmd-companion.vercel.app/api/create-deal', {
+            fetch('https://cmd-api-gateway.vercel.app/api/create-deal', {
               method: 'POST',
               mode: 'cors',
               headers: { 'Content-Type': 'application/json', 'X-API-Key': '89fa2b1d87e124c78403040bf8865243' },
