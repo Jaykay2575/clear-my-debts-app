@@ -1132,7 +1132,7 @@
     var cancelUrl = baseUrl + '?payment=cancelled';
     paymentLinkEl.href = tier.link;
 
-    // Store form data in sessionStorage so we can recover it after Stripe redirect
+    // Store form data in window.name so we can recover it after Stripe redirect
     try {
       var formBackup = {
         creditors: creditors,
@@ -1642,14 +1642,13 @@
   // =============================================
   //  PAYMENT FLOW: Redirect to signing after Stripe
   // =============================================
-  // When user clicks "Start my plan", we save data to localStorage
-  // (persists across page navigations, unlike sessionStorage).
+  // When user clicks "Start my plan", we save data to window.name so it
+  // persists across the Stripe redirect (same-tab navigations preserve it).
   // When Stripe redirects them back, we detect the saved data and
   // jump straight to the Service Agreement signing step.
   var paymentLinkEl = document.getElementById('paymentLink');
   if (paymentLinkEl) {
     paymentLinkEl.addEventListener('click', function () {
-      // Save form data to localStorage
       var income = parseCurrencyInput(monthlyIncomeInput.value);
       var totalBills = 0;
       billInputs.forEach(function (input) {
@@ -1663,15 +1662,15 @@
         firstName: firstNameInput.value.trim(),
         phone: phoneInput.value.trim(),
         email: emailInput.value.trim(),
-        bills: {}
+        bills: {},
+        cmd_return_to_sign: true
       };
       billInputs.forEach(function (input) {
         formData.bills[input.id] = parseCurrencyInput(input.value);
       });
 
       try {
-        localStorage.setItem('cmd_form_data', JSON.stringify(formData));
-        localStorage.setItem('cmd_return_to_sign', 'true');
+        window.name = JSON.stringify(formData);
       } catch (e) {}
 
       // Let Stripe open — don't show agreement yet, wait for redirect back
@@ -1888,7 +1887,7 @@
       var tier = getCurrentTier();
       if (!tier) return;
 
-      // Save form data to localStorage (same as pay-now flow, for post-Stripe agreement)
+      // Save form data to window.name (same as pay-now flow, for post-Stripe agreement)
       var formData = {
         creditors: creditors,
         income: parseCurrencyInput(monthlyIncomeInput.value),
@@ -1896,15 +1895,15 @@
         fullName: firstNameInput.value.trim(),
         phone: phoneInput.value.trim(),
         email: emailInput.value.trim(),
-        bills: {}
+        bills: {},
+        cmd_return_to_sign: true
       };
       billInputs.forEach(function (input) {
         formData.totalBills += parseCurrencyInput(input.value);
         formData.bills[input.id] = parseCurrencyInput(input.value);
       });
       try {
-        localStorage.setItem('cmd_form_data', JSON.stringify(formData));
-        localStorage.setItem('cmd_return_to_sign', 'true');
+        window.name = JSON.stringify(formData);
       } catch (e) {}
 
       // Show loading state
@@ -1957,35 +1956,35 @@
     return PAYMENT_TIERS[PAYMENT_TIERS.length - 1];
   }
 
-  // Check if returning from Stripe
+  // Check if returning from Stripe (fallback path when ?payment param is absent).
+  // Reads window.name, which persists across same-tab navigations including the
+  // Stripe redirect.
   function checkStripeReturn() {
     try {
-      if (localStorage.getItem('cmd_return_to_sign') === 'true') {
-        var data = JSON.parse(localStorage.getItem('cmd_form_data'));
-        if (data) {
-          // Restore form data
-          creditors = data.creditors || [];
-          renderCreditors();
-          monthlyIncomeInput.value = data.income ? data.income.toLocaleString('en-AU') : '';
-          firstNameInput.value = data.fullName || data.firstName || '';
-          phoneInput.value = data.phone || '';
-          emailInput.value = data.email || '';
+      if (!window.name) return false;
+      var data = JSON.parse(window.name);
+      if (data && data.cmd_return_to_sign) {
+        // Restore form data
+        creditors = data.creditors || [];
+        renderCreditors();
+        monthlyIncomeInput.value = data.income ? data.income.toLocaleString('en-AU') : '';
+        firstNameInput.value = data.fullName || data.firstName || '';
+        phoneInput.value = data.phone || '';
+        emailInput.value = data.email || '';
 
-          if (data.bills) {
-            Object.keys(data.bills).forEach(function (id) {
-              var el = document.getElementById(id);
-              if (el && data.bills[id]) el.value = data.bills[id].toLocaleString('en-AU');
-            });
-          }
-
-          // Clear the flag so it doesn't trigger again
-          localStorage.removeItem('cmd_return_to_sign');
-          localStorage.removeItem('cmd_form_data');
-
-          // Go straight to signing
-          showAgreement();
-          return true;
+        if (data.bills) {
+          Object.keys(data.bills).forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el && data.bills[id]) el.value = data.bills[id].toLocaleString('en-AU');
+          });
         }
+
+        // Clear so it doesn't trigger again on subsequent reloads
+        window.name = '';
+
+        // Go straight to signing
+        showAgreement();
+        return true;
       }
     } catch (e) {}
     return false;
