@@ -84,9 +84,9 @@
 
             <!-- Question -->
             <div class="intro-question">
-              <p class="intro-question__eyebrow">Free debt assessment</p>
-              <h1 class="intro-question__headline">How much do you owe<br>across all debts?</h1>
-              <p class="intro-question__sub">Tap one — we'll show you what a single monthly payment could look like.</p>
+              <p class="intro-question__eyebrow">No credit check · No obligation</p>
+              <h1 class="intro-question__headline">Money disappearing<br>before payday?</h1>
+              <p class="intro-question__sub">Wage advance, BNPL, payday loans, bills — if it's eating your pay, we may be able to help. Tap a rough total to start.</p>
             </div>
 
             <!-- Debt Range Grid -->
@@ -97,6 +97,7 @@
               <button type="button" class="debt-grid__btn" data-range="30k-50k"><span>$30k – $50k</span></button>
               <button type="button" class="debt-grid__btn" data-range="50k-100k"><span>$50k – $100k</span></button>
               <button type="button" class="debt-grid__btn" data-range="100k-plus"><span>$100k+</span></button>
+              <button type="button" class="debt-grid__btn debt-grid__btn--unsure" data-range="unsure"><span>I'm not sure</span></button>
             </div>
 
             <!-- Savings hook -->
@@ -104,17 +105,17 @@
               <div class="savings-hook__icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
               </div>
-              <p class="savings-hook__text">Our clients save an average of <strong>$1,200/month</strong> — we negotiate with your creditors to freeze interest and reduce what you owe.</p>
+              <p class="savings-hook__text">We may be able to roll your app repayments, BNPL and bills into <strong>one smaller monthly payment</strong> — and apply for an interest freeze with each lender.</p>
             </div>
 
             <!-- Testimonial -->
             <div class="intro-testimonial">
-              <p class="intro-testimonial__quote">"I was drowning in $42k of debt across 6 creditors. Clear My Debts got it down to one payment of $320/month. I can finally breathe."</p>
-              <p class="intro-testimonial__author">— Sarah M., Sydney</p>
+              <p class="intro-testimonial__quote">"My pay was gone the day it landed — wage advance, Afterpay, two payday loans. They got it down to one payment I could actually afford."</p>
+              <p class="intro-testimonial__author">— Daniel R., Western Sydney</p>
             </div>
 
             <!-- Micro-copy -->
-            <p class="intro__time">Takes 2 minutes. No credit check. 100% confidential.</p>
+            <p class="intro__time">Takes about 2 minutes · No credit check to complete this form · 100% confidential</p>
 
             <!-- Chat fallback -->
             <div class="intro-chat-compact">
@@ -134,30 +135,129 @@
           </div>
         </div>
 
+        <!-- Step 0a: What's eating your pay? (multi-select chips) -->
+        <div class="step" data-step="signals">
+          <div class="step__content">
+            <p class="step__label">Quick check</p>
+            <h2 class="step__title">What's eating<br>your pay?</h2>
+            <p class="step__subtitle">Tap any that apply — pick more than one if you need to. We'll use this to work out the right options for you.</p>
+
+            <div class="chip-grid" id="signalChips">
+              <button type="button" class="chip" data-signal="wage_advance"><span>Wage advance app (e.g. MyPayNow, Beforepay)</span></button>
+              <button type="button" class="chip" data-signal="payday_loan"><span>Payday or personal loan</span></button>
+              <button type="button" class="chip" data-signal="bnpl"><span>Afterpay / Zip / BNPL</span></button>
+              <button type="button" class="chip" data-signal="credit_card"><span>Credit card</span></button>
+              <button type="button" class="chip" data-signal="bills"><span>Bills behind (rent, utilities, phone)</span></button>
+              <button type="button" class="chip" data-signal="collectors"><span>Debt collectors chasing me</span></button>
+              <button type="button" class="chip" data-signal="overdraft"><span>Overdraft / negative balance</span></button>
+              <button type="button" class="chip" data-signal="unsure"><span>Not sure — I just know it's tight</span></button>
+            </div>
+
+            <p class="qualifier-microcopy">No credit check. Nothing reported to lenders.</p>
+
+            <button type="button" class="btn btn--primary btn--next" id="signalsNext">
+              Continue
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="btn btn--text qualifier-skip" id="signalsSkip">Skip — I'd rather just talk to someone</button>
+          </div>
+        </div>
+
+        <!-- Step 0b: Payday drain qualifier -->
+        <div class="step" data-step="payday">
+          <div class="step__content">
+            <p class="step__label">Quick check</p>
+            <h2 class="step__title">How much comes<br>out before payday lands?</h2>
+            <p class="step__subtitle">Rough idea is fine. Add up wage advance, BNPL, app repayments and direct debits that hit around payday.</p>
+
+            <div class="debt-grid debt-grid--payday">
+              <button type="button" class="debt-grid__btn" data-payday="under-200"><span>Under $200</span></button>
+              <button type="button" class="debt-grid__btn" data-payday="200-500"><span>$200 – $500</span></button>
+              <button type="button" class="debt-grid__btn" data-payday="500-1000"><span>$500 – $1,000</span></button>
+              <button type="button" class="debt-grid__btn" data-payday="1000-2000"><span>$1,000 – $2,000</span></button>
+              <button type="button" class="debt-grid__btn" data-payday="2000-plus"><span>$2,000+</span></button>
+              <button type="button" class="debt-grid__btn debt-grid__btn--unsure" data-payday="check-app"><span>I'd need to check my bank app</span></button>
+            </div>
+
+            <div class="qualifier-row">
+              <label for="payCycle" class="field-label">Pay cycle</label>
+              <select id="payCycle" class="input qualifier-select">
+                <option value="">Choose pay cycle (optional)</option>
+                <option value="weekly">Weekly</option>
+                <option value="fortnightly">Fortnightly</option>
+                <option value="monthly">Monthly</option>
+                <option value="irregular">Irregular / casual</option>
+                <option value="centrelink">Centrelink</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn btn--text qualifier-skip" id="paydaySkip">Skip this question</button>
+          </div>
+        </div>
+
+        <!-- Step 0c: Channel preference -->
+        <div class="step" data-step="channel">
+          <div class="step__content">
+            <p class="step__label">How can we help?</p>
+            <h2 class="step__title">How would you<br>like to do this?</h2>
+            <p class="step__subtitle">No phone calls unless you want one. Pick what feels easiest — you can change your mind later.</p>
+
+            <div class="chip-grid chip-grid--single" id="channelChips">
+              <button type="button" class="chip chip--lg" data-channel="text">
+                <span class="chip__title">Text me</span>
+                <span class="chip__desc">SMS or WhatsApp — no calls.</span>
+              </button>
+              <button type="button" class="chip chip--lg" data-channel="form">
+                <span class="chip__title">Just the quick form</span>
+                <span class="chip__desc">I'll fill it in and you can email me options.</span>
+              </button>
+              <button type="button" class="chip chip--lg" data-channel="call">
+                <span class="chip__title">Quick call works</span>
+                <span class="chip__desc">A short, no-pressure chat is fine.</span>
+              </button>
+              <button type="button" class="chip chip--lg" data-channel="unsure">
+                <span class="chip__title">Not sure yet</span>
+                <span class="chip__desc">Show me the options first.</span>
+              </button>
+            </div>
+
+            <p class="qualifier-microcopy">No obligation. We won't share your details.</p>
+          </div>
+        </div>
+
         <!-- Step 1: Creditors -->
         <div class="step" data-step="1">
           <div class="step__content">
             <p class="step__label">Step 1 of 3</p>
-            <h1 class="step__title">Who do you owe<br>money to?</h1>
-            <p class="step__subtitle">Add each creditor — we'll use this to negotiate on your behalf.</p>
+            <h1 class="step__title">Who or what<br>are you paying?</h1>
+            <p class="step__subtitle">Add what you remember — even rough names like "wage advance app" or "Afterpay" are fine. You don't need exact balances.</p>
+
+            <!-- Don't know option -->
+            <div class="creditor-help" id="creditorHelp">
+              <button type="button" class="creditor-help__btn" id="creditorUnsureBtn">
+                <span class="creditor-help__title">I'm not sure who I owe — show me how this works</span>
+                <span class="creditor-help__desc">Skip this for now. We'll help you map it out together.</span>
+              </button>
+              <p class="creditor-help__hint">Tip: open your banking app and look at recent direct debits. That's usually the full picture.</p>
+            </div>
 
             <!-- Add Creditor Form -->
             <div class="creditor-add">
               <div class="field-group">
-                <label for="creditorName" class="field-label">Creditor name</label>
+                <label for="creditorName" class="field-label">Lender, app or bill</label>
                 <div class="autocomplete-wrap">
                   <input
                     type="text"
                     id="creditorName"
                     class="input"
-                    placeholder="e.g. CommBank, Afterpay..."
+                    placeholder="e.g. MyPayNow, Afterpay, CommBank..."
                     autocomplete="off"
                   >
                   <div class="autocomplete-list" id="autocompleteList"></div>
                 </div>
               </div>
               <div class="field-group">
-                <label for="creditorAmount" class="field-label">Amount owed</label>
+                <label for="creditorAmount" class="field-label">Roughly how much (a guess is fine)</label>
                 <div class="input-currency">
                   <span class="input-currency__symbol">$</span>
                   <input
@@ -197,7 +297,7 @@
           <div class="step__content">
             <p class="step__label">Step 2 of 3</p>
             <h2 class="step__title">Your income<br>and bills</h2>
-            <p class="step__subtitle">Just the basics — helps us work out what you can afford.</p>
+            <p class="step__subtitle">Rough numbers are fine. Helps us work out a payment you can actually afford.</p>
 
             <div class="field-group">
               <label for="monthlyIncome" class="field-label">Monthly income (after tax)</label>
@@ -297,7 +397,7 @@
           <div class="step__content">
             <p class="step__label">Step 3 of 3 — almost done</p>
             <h2 class="step__title">Almost done — how do we reach you?</h2>
-            <p class="step__subtitle">We'll review your snapshot and get started on your plan.</p>
+            <p class="step__subtitle">We'll respect your contact preference. No cold calls — we'll text or email first if that's what you picked.</p>
 
             <div class="field-group">
               <label for="firstName" class="field-label">Full name</label>
@@ -342,7 +442,7 @@
               <label class="consent-toggle">
                 <input type="checkbox" id="consentCheck">
                 <span class="consent-toggle__switch"></span>
-                <span class="consent-toggle__label">I consent to Clear My Debts contacting me about my debt options.</span>
+                <span class="consent-toggle__label">I consent to Clear My Debts contacting me about my options. I understand there's no obligation and I can opt out anytime.</span>
               </label>
             </div>
 
