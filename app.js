@@ -187,14 +187,6 @@
     progressBar.parentElement.setAttribute('aria-valuenow', pct);
   }
 
-  // Progress hints for non-numeric early-funnel steps so the bar moves
-  // visibly through the qualifier without claiming the user is "done".
-  var STEP_PROGRESS_HINT = {
-    'signals': 0.3,
-    'payday':  0.6,
-    'channel': 0.9
-  };
-
   function goToStep(n) {
     steps.forEach(function (s) { s.classList.remove('active'); });
     var target = document.querySelector('[data-step="' + n + '"]');
@@ -204,12 +196,6 @@
       if (typeof n === 'number') {
         updateProgress(n);
         track('snapshot_step', { step_number: n });
-      } else if (STEP_PROGRESS_HINT[n] != null) {
-        // Map qualifier steps to a fraction of step 1 so the bar inches forward
-        var pct = Math.round(STEP_PROGRESS_HINT[n] * (1 / totalSteps) * 100);
-        progressBar.style.width = pct + '%';
-        progressBar.parentElement.setAttribute('aria-valuenow', pct);
-        track('snapshot_qualifier_step', { qualifier_step: n });
       } else {
         progressBar.style.width = '100%';
       }
@@ -250,27 +236,7 @@
   // =============================================
   //  INTRO / QUESTION-FIRST (DEBT RANGE GRID)
   // =============================================
-  // Lead context bag — captured across the qualifier flow.
-  // All fields here are additive/optional; existing downstream
-  // submission still works if any of them are missing.
-  var leadContext = {
-    lead_type: 'mypaynow_app_driven',
-    debt_range: '',
-    signals: [],
-    payday_drain: '',
-    pay_cycle: '',
-    channel_pref: '',
-    creditors_unknown: false
-  };
-  // Expose for debugging / late readers
-  window.__leadContext = leadContext;
-
-  // Only target debt-range buttons in the INTRO step (not the payday step,
-  // which reuses the same .debt-grid__btn class).
-  var introStep = document.querySelector('[data-step="intro"]');
-  var debtGridBtns = introStep
-    ? introStep.querySelectorAll('.debt-grid__btn[data-range]')
-    : [];
+  var debtGridBtns = document.querySelectorAll('.debt-grid__btn');
   debtGridBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
       var range = btn.getAttribute('data-range');
@@ -279,15 +245,16 @@
       debtGridBtns.forEach(function (b) { b.classList.remove('selected'); });
       btn.classList.add('selected');
 
-      // Track + persist
-      leadContext.debt_range = range;
-      window.__selectedDebtRange = range;
+      // Track event
       track('debt_range_selected', { debt_range: range });
       track('intro_start_clicked', {});
 
-      // Brief pause for tactile feel, then advance to qualifier
+      // Store selected range for later use
+      window.__selectedDebtRange = range;
+
+      // Brief pause for tactile feel, then advance
       setTimeout(function () {
-        goToStep('signals');
+        goToStep(1);
       }, 250);
     });
   });
@@ -297,96 +264,7 @@
   if (introStartBtn) {
     introStartBtn.addEventListener('click', function () {
       track('intro_start_clicked', {});
-      goToStep('signals');
-    });
-  }
-
-  // =============================================
-  //  STEP 0a: SIGNALS (multi-select chips)
-  // =============================================
-  var signalChipsEl = document.getElementById('signalChips');
-  if (signalChipsEl) {
-    signalChipsEl.querySelectorAll('.chip').forEach(function (chip) {
-      chip.addEventListener('click', function () {
-        var sig = chip.getAttribute('data-signal');
-        var idx = leadContext.signals.indexOf(sig);
-        if (idx === -1) {
-          leadContext.signals.push(sig);
-          chip.classList.add('selected');
-        } else {
-          leadContext.signals.splice(idx, 1);
-          chip.classList.remove('selected');
-        }
-        track('signal_toggled', { signal: sig, selected: idx === -1 });
-      });
-    });
-  }
-  var signalsNextBtn = document.getElementById('signalsNext');
-  if (signalsNextBtn) {
-    signalsNextBtn.addEventListener('click', function () {
-      track('signals_continue', { signal_count: leadContext.signals.length });
-      goToStep('payday');
-    });
-  }
-  var signalsSkipBtn = document.getElementById('signalsSkip');
-  if (signalsSkipBtn) {
-    signalsSkipBtn.addEventListener('click', function () {
-      // User would rather just talk to someone — set channel pref + jump
-      // straight to contact step so we can capture phone/name fast.
-      leadContext.channel_pref = 'call';
-      track('signals_skip_to_contact', {});
-      goToStep('channel');
-    });
-  }
-
-  // =============================================
-  //  STEP 0b: PAYDAY DRAIN
-  // =============================================
-  var paydayStep = document.querySelector('[data-step="payday"]');
-  var paydayBtns = paydayStep
-    ? paydayStep.querySelectorAll('.debt-grid__btn[data-payday]')
-    : [];
-  paydayBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var v = btn.getAttribute('data-payday');
-      paydayBtns.forEach(function (b) { b.classList.remove('selected'); });
-      btn.classList.add('selected');
-      leadContext.payday_drain = v;
-      track('payday_drain_selected', { payday_drain: v });
-      setTimeout(function () { goToStep('channel'); }, 220);
-    });
-  });
-  var payCycleEl = document.getElementById('payCycle');
-  if (payCycleEl) {
-    payCycleEl.addEventListener('change', function () {
-      leadContext.pay_cycle = payCycleEl.value || '';
-      track('pay_cycle_selected', { pay_cycle: leadContext.pay_cycle });
-    });
-  }
-  var paydaySkipBtn = document.getElementById('paydaySkip');
-  if (paydaySkipBtn) {
-    paydaySkipBtn.addEventListener('click', function () {
-      track('payday_skipped', {});
-      goToStep('channel');
-    });
-  }
-
-  // =============================================
-  //  STEP 0c: CHANNEL PREFERENCE
-  // =============================================
-  var channelChipsEl = document.getElementById('channelChips');
-  if (channelChipsEl) {
-    channelChipsEl.querySelectorAll('.chip').forEach(function (chip) {
-      chip.addEventListener('click', function () {
-        var v = chip.getAttribute('data-channel');
-        channelChipsEl.querySelectorAll('.chip').forEach(function (c) {
-          c.classList.remove('selected');
-        });
-        chip.classList.add('selected');
-        leadContext.channel_pref = v;
-        track('channel_pref_selected', { channel_pref: v });
-        setTimeout(function () { goToStep(1); }, 220);
-      });
+      goToStep(1);
     });
   }
 
@@ -580,10 +458,6 @@
     if (creditors.length > 0) {
       debtTotal.style.display = '';
       step1Next.style.display = '';
-    } else if (leadContext.creditors_unknown) {
-      // User opted "I'm not sure" — keep continue visible, hide running total
-      debtTotal.style.display = 'none';
-      step1Next.style.display = '';
     } else {
       debtTotal.style.display = 'none';
       step1Next.style.display = 'none';
@@ -597,25 +471,10 @@
   }
 
   step1Next.addEventListener('click', function () {
-    if (creditors.length > 0 || leadContext.creditors_unknown) {
+    if (creditors.length > 0) {
       goToStep(2);
     }
   });
-
-  // "I'm not sure who I owe" escape — keeps user in funnel without forcing
-  // them to know creditor names. Marks lead as needing manual creditor
-  // discovery, then jumps to income step so we can still qualify them.
-  var creditorUnsureBtn = document.getElementById('creditorUnsureBtn');
-  if (creditorUnsureBtn) {
-    creditorUnsureBtn.addEventListener('click', function () {
-      leadContext.creditors_unknown = true;
-      // Show the next button so they can move forward, even with no creditors
-      step1Next.style.display = '';
-      track('creditors_unsure_clicked', {});
-      // Auto-advance after a short tactile pause
-      setTimeout(function () { goToStep(2); }, 200);
-    });
-  }
 
   // =============================================
   //  STEP 2: INCOME & BILLS
@@ -750,7 +609,7 @@
       'Phone': phone,
       'Email': email,
       '---': '--- CREDITORS ---',
-      'Creditors': creditorLines || (leadContext.creditors_unknown ? '(client unsure — needs help mapping)' : '(none entered)'),
+      'Creditors': creditorLines,
       'Total Debt': formatCurrency(totalDebt),
       '----': '--- BUDGET ---',
       'Monthly Income': formatCurrency(income),
@@ -768,30 +627,13 @@
     if (utm.content) payload['Content'] = utm.content;
     if (utm.term) payload['Term'] = utm.term;
 
-    // Lead-context fields (additive — only included when set, so existing
-    // downstream pipelines that don't know about these keys are unaffected).
-    if (leadContext.lead_type)        payload['Lead Type'] = leadContext.lead_type;
-    if (leadContext.debt_range)       payload['Debt Range Selected'] = leadContext.debt_range;
-    if (leadContext.signals.length)   payload['Pressure Signals'] = leadContext.signals.join(', ');
-    if (leadContext.payday_drain)     payload['Payday Drain'] = leadContext.payday_drain;
-    if (leadContext.pay_cycle)        payload['Pay Cycle'] = leadContext.pay_cycle;
-    if (leadContext.channel_pref)     payload['Contact Preference'] = leadContext.channel_pref;
-    if (leadContext.creditors_unknown) payload['Creditors Unknown'] = 'Yes — needs help mapping debts';
-
     track('snapshot_submitted', {
       total_debt: totalDebt,
       creditor_count: creditors.length,
       monthly_income: income,
       remaining: remaining,
       utm_source: utm.source,
-      utm_campaign: utm.campaign,
-      lead_type: leadContext.lead_type,
-      debt_range: leadContext.debt_range,
-      signal_count: leadContext.signals.length,
-      payday_drain: leadContext.payday_drain,
-      pay_cycle: leadContext.pay_cycle,
-      channel_pref: leadContext.channel_pref,
-      creditors_unknown: leadContext.creditors_unknown
+      utm_campaign: utm.campaign
     });
 
     // Send to Web3Forms (primary)
@@ -836,15 +678,7 @@
       totalBills: totalBills,
       remaining: remaining,
       source: utm.source,
-      campaign: utm.campaign,
-      // Optional lead-context fields — Sheets columns can ignore unknown keys.
-      lead_type: leadContext.lead_type,
-      debt_range: leadContext.debt_range,
-      signals: leadContext.signals.join(','),
-      payday_drain: leadContext.payday_drain,
-      pay_cycle: leadContext.pay_cycle,
-      channel_pref: leadContext.channel_pref,
-      creditors_unknown: leadContext.creditors_unknown
+      campaign: utm.campaign
     });
 
     // Create contact + deal in HubSpot via CMD Companion API
@@ -865,23 +699,6 @@
         .then(function (res) { return res.json(); })
         .then(function (contactResult) {
           if (contactResult.success && contactResult.contact) {
-            // Build qualifier note — appended to creditor_details so it's
-            // visible in HubSpot even if the deal pipeline doesn't have
-            // dedicated fields for these signals yet.
-            var qualifierLines = [];
-            if (leadContext.lead_type)        qualifierLines.push('Lead type: ' + leadContext.lead_type);
-            if (leadContext.debt_range)       qualifierLines.push('Debt range: ' + leadContext.debt_range);
-            if (leadContext.signals.length)   qualifierLines.push('Pressure signals: ' + leadContext.signals.join(', '));
-            if (leadContext.payday_drain)     qualifierLines.push('Payday drain: ' + leadContext.payday_drain);
-            if (leadContext.pay_cycle)        qualifierLines.push('Pay cycle: ' + leadContext.pay_cycle);
-            if (leadContext.channel_pref)     qualifierLines.push('Contact preference: ' + leadContext.channel_pref);
-            if (leadContext.creditors_unknown) qualifierLines.push('Creditors unknown — needs help mapping debts');
-
-            var enrichedCreditorDetails = creditorLines || '(no creditors entered)';
-            if (qualifierLines.length) {
-              enrichedCreditorDetails += '\n\n--- Lead context ---\n' + qualifierLines.join('\n');
-            }
-
             // Create deal linked to the contact
             fetch('https://cmd-api-gateway.vercel.app/api/create-deal', {
               method: 'POST',
@@ -890,17 +707,10 @@
               body: JSON.stringify({
                 dealname: fullName + ' — $' + totalDebt.toLocaleString('en-AU') + ' Debt Plan',
                 total_debt: String(totalDebt),
-                creditor_details: enrichedCreditorDetails,
+                creditor_details: creditorLines,
                 number_of_creditors: String(creditors.length),
                 lead_source: utm.source || 'website',
-                contactId: contactResult.contact.id,
-                // Optional fields the gateway may map through — safe to ignore if unknown
-                lead_type: leadContext.lead_type,
-                debt_range: leadContext.debt_range,
-                pressure_signals: leadContext.signals.join(','),
-                payday_drain: leadContext.payday_drain,
-                pay_cycle: leadContext.pay_cycle,
-                channel_pref: leadContext.channel_pref
+                contactId: contactResult.contact.id
               })
             }).catch(function () { /* silent */ });
           }
@@ -1132,7 +942,7 @@
     var cancelUrl = baseUrl + '?payment=cancelled';
     paymentLinkEl.href = tier.link;
 
-    // Store form data in window.name so we can recover it after Stripe redirect
+    // Store form data in sessionStorage so we can recover it after Stripe redirect
     try {
       var formBackup = {
         creditors: creditors,
@@ -1642,13 +1452,14 @@
   // =============================================
   //  PAYMENT FLOW: Redirect to signing after Stripe
   // =============================================
-  // When user clicks "Start my plan", we save data to window.name so it
-  // persists across the Stripe redirect (same-tab navigations preserve it).
+  // When user clicks "Start my plan", we save data to localStorage
+  // (persists across page navigations, unlike sessionStorage).
   // When Stripe redirects them back, we detect the saved data and
   // jump straight to the Service Agreement signing step.
   var paymentLinkEl = document.getElementById('paymentLink');
   if (paymentLinkEl) {
     paymentLinkEl.addEventListener('click', function () {
+      // Save form data to localStorage
       var income = parseCurrencyInput(monthlyIncomeInput.value);
       var totalBills = 0;
       billInputs.forEach(function (input) {
@@ -1662,15 +1473,15 @@
         firstName: firstNameInput.value.trim(),
         phone: phoneInput.value.trim(),
         email: emailInput.value.trim(),
-        bills: {},
-        cmd_return_to_sign: true
+        bills: {}
       };
       billInputs.forEach(function (input) {
         formData.bills[input.id] = parseCurrencyInput(input.value);
       });
 
       try {
-        window.name = JSON.stringify(formData);
+        localStorage.setItem('cmd_form_data', JSON.stringify(formData));
+        localStorage.setItem('cmd_return_to_sign', 'true');
       } catch (e) {}
 
       // Let Stripe open — don't show agreement yet, wait for redirect back
@@ -1887,7 +1698,7 @@
       var tier = getCurrentTier();
       if (!tier) return;
 
-      // Save form data to window.name (same as pay-now flow, for post-Stripe agreement)
+      // Save form data to localStorage (same as pay-now flow, for post-Stripe agreement)
       var formData = {
         creditors: creditors,
         income: parseCurrencyInput(monthlyIncomeInput.value),
@@ -1895,15 +1706,15 @@
         fullName: firstNameInput.value.trim(),
         phone: phoneInput.value.trim(),
         email: emailInput.value.trim(),
-        bills: {},
-        cmd_return_to_sign: true
+        bills: {}
       };
       billInputs.forEach(function (input) {
         formData.totalBills += parseCurrencyInput(input.value);
         formData.bills[input.id] = parseCurrencyInput(input.value);
       });
       try {
-        window.name = JSON.stringify(formData);
+        localStorage.setItem('cmd_form_data', JSON.stringify(formData));
+        localStorage.setItem('cmd_return_to_sign', 'true');
       } catch (e) {}
 
       // Show loading state
@@ -1956,35 +1767,35 @@
     return PAYMENT_TIERS[PAYMENT_TIERS.length - 1];
   }
 
-  // Check if returning from Stripe (fallback path when ?payment param is absent).
-  // Reads window.name, which persists across same-tab navigations including the
-  // Stripe redirect.
+  // Check if returning from Stripe
   function checkStripeReturn() {
     try {
-      if (!window.name) return false;
-      var data = JSON.parse(window.name);
-      if (data && data.cmd_return_to_sign) {
-        // Restore form data
-        creditors = data.creditors || [];
-        renderCreditors();
-        monthlyIncomeInput.value = data.income ? data.income.toLocaleString('en-AU') : '';
-        firstNameInput.value = data.fullName || data.firstName || '';
-        phoneInput.value = data.phone || '';
-        emailInput.value = data.email || '';
+      if (localStorage.getItem('cmd_return_to_sign') === 'true') {
+        var data = JSON.parse(localStorage.getItem('cmd_form_data'));
+        if (data) {
+          // Restore form data
+          creditors = data.creditors || [];
+          renderCreditors();
+          monthlyIncomeInput.value = data.income ? data.income.toLocaleString('en-AU') : '';
+          firstNameInput.value = data.fullName || data.firstName || '';
+          phoneInput.value = data.phone || '';
+          emailInput.value = data.email || '';
 
-        if (data.bills) {
-          Object.keys(data.bills).forEach(function (id) {
-            var el = document.getElementById(id);
-            if (el && data.bills[id]) el.value = data.bills[id].toLocaleString('en-AU');
-          });
+          if (data.bills) {
+            Object.keys(data.bills).forEach(function (id) {
+              var el = document.getElementById(id);
+              if (el && data.bills[id]) el.value = data.bills[id].toLocaleString('en-AU');
+            });
+          }
+
+          // Clear the flag so it doesn't trigger again
+          localStorage.removeItem('cmd_return_to_sign');
+          localStorage.removeItem('cmd_form_data');
+
+          // Go straight to signing
+          showAgreement();
+          return true;
         }
-
-        // Clear so it doesn't trigger again on subsequent reloads
-        window.name = '';
-
-        // Go straight to signing
-        showAgreement();
-        return true;
       }
     } catch (e) {}
     return false;
