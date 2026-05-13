@@ -683,6 +683,8 @@
 
     // Create contact + deal in HubSpot via CMD Companion API
     try {
+      var snapshotSetupFee = getSetupFee(creditors.length);
+      var snapshotTier = getPaymentTier(Math.max(remaining, 0));
       fetch('https://cmd-api-gateway.vercel.app/api/create-contact', {
         method: 'POST',
         mode: 'cors',
@@ -707,6 +709,8 @@
               body: JSON.stringify({
                 dealname: fullName + ' — $' + totalDebt.toLocaleString('en-AU') + ' Debt Plan',
                 total_debt: String(totalDebt),
+                setup_fee: String(snapshotSetupFee),
+                monthly_payment: String(snapshotTier.amount),
                 creditor_details: creditorLines,
                 number_of_creditors: String(creditors.length),
                 lead_source: utm.source || 'website',
@@ -1234,6 +1238,57 @@
         source: utm.source,
         campaign: utm.campaign
       });
+
+      // Forward agreement merge data to HubSpot via CMD Companion API
+      try {
+        var ataFull = ataFullName.value.trim();
+        var ataParts = ataFull.split(' ');
+        var ataFirst = ataParts[0];
+        var ataLast = ataParts.length > 1 ? ataParts.slice(1).join(' ') : '';
+        var ataEmail = emailInput.value.trim();
+        var ataPhone = phoneInput.value.trim();
+        var ataAddr = ataAddress.value.trim();
+        var ataLic = ataLicence.value.trim();
+        var ataDobVal = ataDob.value;
+        fetch('https://cmd-api-gateway.vercel.app/api/create-contact', {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json', 'X-API-Key': '89fa2b1d87e124c78403040bf8865243' },
+          body: JSON.stringify({
+            firstname: ataFirst,
+            lastname: ataLast,
+            email: ataEmail,
+            phone: ataPhone,
+            address: ataAddr,
+            date_of_birth: ataDobVal,
+            consent_given: true,
+            sms_consent: true
+          })
+        })
+          .then(function (res) { return res.json(); })
+          .then(function (contactResult) {
+            if (contactResult && contactResult.success && contactResult.contact) {
+              fetch('https://cmd-api-gateway.vercel.app/api/create-deal', {
+                method: 'POST',
+                mode: 'cors',
+                headers: { 'Content-Type': 'application/json', 'X-API-Key': '89fa2b1d87e124c78403040bf8865243' },
+                body: JSON.stringify({
+                  dealname: ataFull + ' — $' + totalDebt.toLocaleString('en-AU') + ' Debt Plan (Signed)',
+                  total_debt: String(totalDebt),
+                  setup_fee: String(setupFee),
+                  monthly_payment: String(tier.amount),
+                  creditor_details: creditorLines,
+                  number_of_creditors: String(creditors.length),
+                  driver_licence_number: ataLic,
+                  start_date: timestamp,
+                  lead_source: utm.source || 'website',
+                  contactId: contactResult.contact.id
+                })
+              }).catch(function () { /* silent */ });
+            }
+          })
+          .catch(function () { /* silent — HubSpot update is best-effort */ });
+      } catch (e) { /* silent */ }
     });
   }
 
