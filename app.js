@@ -1286,7 +1286,7 @@
                 })
               }).then(function () {
                 // Trigger DocuSign — send Authority to Act + Cost Agreement to the customer
-                fetch('https://app.clearmydebts.com.au/api/trigger-docusign', {
+                fetch('https://app.clearmydebts.com.au/api/esign?action=trigger-docusign', {
                   method: 'POST',
                   mode: 'cors',
                   headers: { 'Content-Type': 'application/json', 'X-API-Key': '89fa2b1d87e124c78403040bf8865243' },
